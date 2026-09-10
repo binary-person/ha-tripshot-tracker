@@ -236,3 +236,15 @@ value, so each counter restores itself.
   is why the measurement grace is derived from the poll interval rather than
   chosen. See
   [`docs-apk/50-semantics-time-locality.md`](docs-apk/50-semantics-time-locality.md).
+
+## Trademarks and affiliation
+
+Independent and unofficial. **Not affiliated with, sponsored by, endorsed by,
+or supported by TripShot, Inc. or the University of Rochester.**
+
+"TripShot" is a trademark of TripShot, Inc. Route and stop names are the
+operator's. Those names appear here only to identify the service this software
+interoperates with — there is no other way to say what it does.
+
+No third-party logo or brand asset is shipped. The icon is original work, MIT
+licensed with the rest of the source. See [`NOTICE`](NOTICE).
