@@ -247,6 +247,10 @@ operator's. Those names appear here only to identify the service this software
 interoperates with — there is no other way to say what it does.
 
 The integration's icon reproduces TripShot's own, so Home Assistant shows a
-recognisable icon for the service rather than a placeholder. It is **not**
-covered by this project's MIT licence — see the scope note in
-[`LICENSE`](LICENSE) and [`NOTICE`](NOTICE).
+recognisable icon for the service rather than a placeholder.
+
+**Licence scope:** the MIT licence covers every file *except* the contents of
+`custom_components/tripshot_tracker/brand/`, which reproduce a third-party
+trademark and are not this project's to license. [`NOTICE`](NOTICE) states this
+in full. It is kept there rather than in [`LICENSE`](LICENSE) so that file stays
+verbatim MIT and remains machine-identifiable.

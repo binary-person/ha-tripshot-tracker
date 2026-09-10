@@ -1,8 +1,11 @@
 TripShot Tracker
 Copyright (c) 2026 Simon Cheng
 
-Licensed under the MIT License, with one exception -- see SCOPE in LICENSE and
-"Brand assets" below.
+Licensed under the MIT License, with one exception -- see "Brand assets" below.
+
+This exception is recorded here rather than inside LICENSE so that LICENSE
+remains verbatim MIT text and stays machine-identifiable by GitHub, HACS and
+other tooling. Editing it caused the licence to be reported as NOASSERTION.
 
 
 AFFILIATION
