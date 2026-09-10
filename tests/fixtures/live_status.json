@@ -1,0 +1,21 @@
+{
+ "timestamp": "2026-09-09T22:47:26.092560206000Z",
+ "vehicleStatuses": [
+  {
+   "visibility": "PublicRider",
+   "vehicleId": "97d597ef-73bc-4940-bfcc-c04df064ad00",
+   "name": "2603",
+   "gtfsName": null,
+   "location": {
+    "lt": 43.1318609,
+    "lg": -77.6225309
+   },
+   "accuracy": 0.765,
+   "when": "2026-09-09T22:47:24.802Z",
+   "bearing": 93.0,
+   "speed": 11.62,
+   "liveDataAvailable": true,
+   "vestigeViewLiveFeed": null
+  }
+ ]
+}

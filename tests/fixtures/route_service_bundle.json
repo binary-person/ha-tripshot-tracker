@@ -1,0 +1,1435 @@
+{
+ "routeServices": [
+  {
+   "routeServiceId": "99925de0-8766-4c54-9fad-38a37426bc78",
+   "routeId": "22443444-e127-4e40-8927-a3192e750369",
+   "name": "Red Line - Spring '26",
+   "vias": [
+    {
+     "ViaStop": {
+      "stop": {
+       "stopId": "37fb377f-6170-4948-9560-9fd3569c30b4",
+       "location": {
+        "lt": 43.1590312879686,
+        "lg": -77.6012646661841
+       },
+       "name": "Eastman Living Center",
+       "address": {
+        "address": "43.159031, -77.601265",
+        "tags": []
+       },
+       "description": "",
+       "photoIds": [],
+       "yard": false,
+       "terminal": false,
+       "hasParking": false,
+       "onDemand": false,
+       "parentId": null,
+       "groupParent": null,
+       "geofence": {
+        "Circle": 60
+       },
+       "regionId": "ca558ddc-d7f2-4b48-9cac-deea1134f820",
+       "timezone": null,
+       "tags": [],
+       "gtfsId": null,
+       "ttsStopName": null,
+       "deleted": null,
+       "yardCapacity": null,
+       "yardVendorId": null,
+       "yardMiddayParking": null
+      },
+      "visitType": "DropOffOrPickup",
+      "arrivalRadiusMeters": 60
+     }
+    },
+    {
+     "ViaWaypoint": {
+      "waypointLocation": {
+       "lt": 43.160153667746656,
+       "lg": -77.60122392895774
+      }
+     }
+    },
+    {
+     "ViaWaypoint": {
+      "waypointLocation": {
+       "lt": 43.16131191818576,
+       "lg": -77.60294054272727
+      }
+     }
+    },
+    {
+     "ViaStop": {
+      "stop": {
+       "stopId": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+       "location": {
+        "lt": 43.128519956169,
+        "lg": -77.6278256312481
+       },
+       "name": "Rush Rhees Library Back Side",
+       "address": {
+        "address": "43.128520, -77.627826",
+        "tags": []
+       },
+       "description": "",
+       "photoIds": [],
+       "yard": false,
+       "terminal": false,
+       "hasParking": false,
+       "onDemand": false,
+       "parentId": null,
+       "groupParent": null,
+       "geofence": {
+        "Circle": 72
+       },
+       "regionId": "ca558ddc-d7f2-4b48-9cac-deea1134f820",
+       "timezone": null,
+       "tags": [],
+       "gtfsId": null,
+       "ttsStopName": null,
+       "deleted": null,
+       "yardCapacity": null,
+       "yardVendorId": null,
+       "yardMiddayParking": null
+      },
+      "visitType": "DropOffOnly",
+      "arrivalRadiusMeters": 72
+     }
+    },
+    {
+     "ViaStop": {
+      "stop": {
+       "stopId": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+       "location": {
+        "lt": 43.128519956169,
+        "lg": -77.6278256312481
+       },
+       "name": "Rush Rhees Library Back Side",
+       "address": {
+        "address": "43.128520, -77.627826",
+        "tags": []
+       },
+       "description": "",
+       "photoIds": [],
+       "yard": false,
+       "terminal": false,
+       "hasParking": false,
+       "onDemand": false,
+       "parentId": null,
+       "groupParent": null,
+       "geofence": {
+        "Circle": 72
+       },
+       "regionId": "ca558ddc-d7f2-4b48-9cac-deea1134f820",
+       "timezone": null,
+       "tags": [],
+       "gtfsId": null,
+       "ttsStopName": null,
+       "deleted": null,
+       "yardCapacity": null,
+       "yardVendorId": null,
+       "yardMiddayParking": null
+      },
+      "visitType": "PickupOnly",
+      "arrivalRadiusMeters": 72
+     }
+    },
+    {
+     "ViaWaypoint": {
+      "waypointLocation": {
+       "lt": 43.14399905499042,
+       "lg": -77.61104946111095
+      }
+     }
+    },
+    {
+     "ViaWaypoint": {
+      "waypointLocation": {
+       "lt": 43.15419745256359,
+       "lg": -77.60444935935759
+      }
+     }
+    },
+    {
+     "ViaStop": {
+      "stop": {
+       "stopId": "37fb377f-6170-4948-9560-9fd3569c30b4",
+       "location": {
+        "lt": 43.1590312879686,
+        "lg": -77.6012646661841
+       },
+       "name": "Eastman Living Center",
+       "address": {
+        "address": "43.159031, -77.601265",
+        "tags": []
+       },
+       "description": "",
+       "photoIds": [],
+       "yard": false,
+       "terminal": false,
+       "hasParking": false,
+       "onDemand": false,
+       "parentId": null,
+       "groupParent": null,
+       "geofence": {
+        "Circle": 60
+       },
+       "regionId": "ca558ddc-d7f2-4b48-9cac-deea1134f820",
+       "timezone": null,
+       "tags": [],
+       "gtfsId": null,
+       "ttsStopName": null,
+       "deleted": null,
+       "yardCapacity": null,
+       "yardVendorId": null,
+       "yardMiddayParking": null
+      },
+      "visitType": "DropOffOrPickup",
+      "arrivalRadiusMeters": 60
+     }
+    }
+   ]
+  }
+ ],
+ "scheduledRides": [
+  [
+   {
+    "scheduledRideId": "321b1a3f-a490-49cf-9474-35cdc3607298",
+    "routeServiceId": "99925de0-8766-4c54-9fad-38a37426bc78",
+    "stops": [
+     null,
+     null,
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "12:25:05",
+      "waitTimeSec": 10,
+      "visitType": "PickupOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "12:45:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     }
+    ],
+    "gtfsId": null,
+    "blockId": null,
+    "shortName": null,
+    "tags": [],
+    "reservedSeating": false,
+    "capacity": null,
+    "bicycleCapacity": null,
+    "wheelchairCapacity": null,
+    "seatsPerWheelchair": null,
+    "hanoverDestinationCode": null,
+    "luminatorDestinationA": null,
+    "luminatorRunNumber": null,
+    "twinVisionDestinationCode": null,
+    "transignDestinationCode": null,
+    "transignEntryId": null,
+    "headsign": null
+   },
+   {
+    "scheduledRideId": "961dd00e-6e1c-4bee-be98-b47d99e9a2e7",
+    "routeServiceId": "99925de0-8766-4c54-9fad-38a37426bc78",
+    "stops": [
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "19:05:05",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOrPickup",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "19:35:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "19:35:05",
+      "waitTimeSec": 10,
+      "visitType": "PickupOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "19:55:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     }
+    ],
+    "gtfsId": null,
+    "blockId": null,
+    "shortName": null,
+    "tags": [],
+    "reservedSeating": false,
+    "capacity": null,
+    "bicycleCapacity": null,
+    "wheelchairCapacity": null,
+    "seatsPerWheelchair": null,
+    "hanoverDestinationCode": null,
+    "luminatorDestinationA": null,
+    "luminatorRunNumber": null,
+    "twinVisionDestinationCode": null,
+    "transignDestinationCode": null,
+    "transignEntryId": null,
+    "headsign": null
+   },
+   {
+    "scheduledRideId": "ecb7f501-ded3-471b-a779-98b444feb265",
+    "routeServiceId": "99925de0-8766-4c54-9fad-38a37426bc78",
+    "stops": [
+     null,
+     null,
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "18:45:05",
+      "waitTimeSec": 10,
+      "visitType": "PickupOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "19:05:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     }
+    ],
+    "gtfsId": null,
+    "blockId": null,
+    "shortName": null,
+    "tags": [],
+    "reservedSeating": false,
+    "capacity": null,
+    "bicycleCapacity": null,
+    "wheelchairCapacity": null,
+    "seatsPerWheelchair": null,
+    "hanoverDestinationCode": null,
+    "luminatorDestinationA": null,
+    "luminatorRunNumber": null,
+    "twinVisionDestinationCode": null,
+    "transignDestinationCode": null,
+    "transignEntryId": null,
+    "headsign": null
+   },
+   {
+    "scheduledRideId": "75bb88a0-e684-48a5-b244-139e6e5537c1",
+    "routeServiceId": "99925de0-8766-4c54-9fad-38a37426bc78",
+    "stops": [
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "13:30:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOrPickup",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "13:50:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     null,
+     null
+    ],
+    "gtfsId": null,
+    "blockId": null,
+    "shortName": null,
+    "tags": [],
+    "reservedSeating": false,
+    "capacity": null,
+    "bicycleCapacity": null,
+    "wheelchairCapacity": null,
+    "seatsPerWheelchair": null,
+    "hanoverDestinationCode": null,
+    "luminatorDestinationA": null,
+    "luminatorRunNumber": null,
+    "twinVisionDestinationCode": null,
+    "transignDestinationCode": null,
+    "transignEntryId": null,
+    "headsign": null
+   },
+   {
+    "scheduledRideId": "9fd7b69f-7bdf-48c1-b7f1-e0a0dae56f98",
+    "routeServiceId": "99925de0-8766-4c54-9fad-38a37426bc78",
+    "stops": [
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "06:10:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOrPickup",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "06:30:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "06:30:05",
+      "waitTimeSec": 10,
+      "visitType": "PickupOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "06:50:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     }
+    ],
+    "gtfsId": null,
+    "blockId": null,
+    "shortName": null,
+    "tags": [],
+    "reservedSeating": false,
+    "capacity": null,
+    "bicycleCapacity": null,
+    "wheelchairCapacity": null,
+    "seatsPerWheelchair": null,
+    "hanoverDestinationCode": null,
+    "luminatorDestinationA": null,
+    "luminatorRunNumber": null,
+    "twinVisionDestinationCode": null,
+    "transignDestinationCode": null,
+    "transignEntryId": null,
+    "headsign": null
+   },
+   {
+    "scheduledRideId": "67518e52-2bcd-42dc-af74-c1e5c6137e07",
+    "routeServiceId": "99925de0-8766-4c54-9fad-38a37426bc78",
+    "stops": [
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "06:50:05",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOrPickup",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "07:10:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "07:10:05",
+      "waitTimeSec": 10,
+      "visitType": "PickupOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "07:30:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     }
+    ],
+    "gtfsId": null,
+    "blockId": null,
+    "shortName": null,
+    "tags": [],
+    "reservedSeating": false,
+    "capacity": null,
+    "bicycleCapacity": null,
+    "wheelchairCapacity": null,
+    "seatsPerWheelchair": null,
+    "hanoverDestinationCode": null,
+    "luminatorDestinationA": null,
+    "luminatorRunNumber": null,
+    "twinVisionDestinationCode": null,
+    "transignDestinationCode": null,
+    "transignEntryId": null,
+    "headsign": null
+   },
+   {
+    "scheduledRideId": "08003a03-8142-4851-9ec9-b882c7eeb859",
+    "routeServiceId": "99925de0-8766-4c54-9fad-38a37426bc78",
+    "stops": [
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "07:30:05",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOrPickup",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "07:50:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "07:55:00",
+      "waitTimeSec": 10,
+      "visitType": "PickupOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "08:15:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     }
+    ],
+    "gtfsId": null,
+    "blockId": null,
+    "shortName": null,
+    "tags": [],
+    "reservedSeating": false,
+    "capacity": null,
+    "bicycleCapacity": null,
+    "wheelchairCapacity": null,
+    "seatsPerWheelchair": null,
+    "hanoverDestinationCode": null,
+    "luminatorDestinationA": null,
+    "luminatorRunNumber": null,
+    "twinVisionDestinationCode": null,
+    "transignDestinationCode": null,
+    "transignEntryId": null,
+    "headsign": null
+   },
+   {
+    "scheduledRideId": "3850d5f0-63ba-4f20-a6a1-af03f7df08a3",
+    "routeServiceId": "99925de0-8766-4c54-9fad-38a37426bc78",
+    "stops": [
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "08:15:05",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOrPickup",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "08:35:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "08:40:05",
+      "waitTimeSec": 10,
+      "visitType": "PickupOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "09:00:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     }
+    ],
+    "gtfsId": null,
+    "blockId": null,
+    "shortName": null,
+    "tags": [],
+    "reservedSeating": false,
+    "capacity": null,
+    "bicycleCapacity": null,
+    "wheelchairCapacity": null,
+    "seatsPerWheelchair": null,
+    "hanoverDestinationCode": null,
+    "luminatorDestinationA": null,
+    "luminatorRunNumber": null,
+    "twinVisionDestinationCode": null,
+    "transignDestinationCode": null,
+    "transignEntryId": null,
+    "headsign": null
+   },
+   {
+    "scheduledRideId": "349d512c-33c6-490e-9087-8121555b8e2a",
+    "routeServiceId": "99925de0-8766-4c54-9fad-38a37426bc78",
+    "stops": [
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "09:00:05",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOrPickup",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "09:20:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "09:25:00",
+      "waitTimeSec": 10,
+      "visitType": "PickupOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "09:45:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     }
+    ],
+    "gtfsId": null,
+    "blockId": null,
+    "shortName": null,
+    "tags": [],
+    "reservedSeating": false,
+    "capacity": null,
+    "bicycleCapacity": null,
+    "wheelchairCapacity": null,
+    "seatsPerWheelchair": null,
+    "hanoverDestinationCode": null,
+    "luminatorDestinationA": null,
+    "luminatorRunNumber": null,
+    "twinVisionDestinationCode": null,
+    "transignDestinationCode": null,
+    "transignEntryId": null,
+    "headsign": null
+   },
+   {
+    "scheduledRideId": "22825c34-f029-4748-9aa2-86c00f470972",
+    "routeServiceId": "99925de0-8766-4c54-9fad-38a37426bc78",
+    "stops": [
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "09:45:05",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOrPickup",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "10:05:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "10:05:05",
+      "waitTimeSec": 10,
+      "visitType": "PickupOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "10:25:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     }
+    ],
+    "gtfsId": null,
+    "blockId": null,
+    "shortName": null,
+    "tags": [],
+    "reservedSeating": false,
+    "capacity": null,
+    "bicycleCapacity": null,
+    "wheelchairCapacity": null,
+    "seatsPerWheelchair": null,
+    "hanoverDestinationCode": null,
+    "luminatorDestinationA": null,
+    "luminatorRunNumber": null,
+    "twinVisionDestinationCode": null,
+    "transignDestinationCode": null,
+    "transignEntryId": null,
+    "headsign": null
+   },
+   {
+    "scheduledRideId": "922928bf-a319-47de-a528-8a819a2e564f",
+    "routeServiceId": "99925de0-8766-4c54-9fad-38a37426bc78",
+    "stops": [
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "10:35:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOrPickup",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "10:55:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "11:00:00",
+      "waitTimeSec": 10,
+      "visitType": "PickupOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "11:20:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     }
+    ],
+    "gtfsId": null,
+    "blockId": null,
+    "shortName": null,
+    "tags": [],
+    "reservedSeating": false,
+    "capacity": null,
+    "bicycleCapacity": null,
+    "wheelchairCapacity": null,
+    "seatsPerWheelchair": null,
+    "hanoverDestinationCode": null,
+    "luminatorDestinationA": null,
+    "luminatorRunNumber": null,
+    "twinVisionDestinationCode": null,
+    "transignDestinationCode": null,
+    "transignEntryId": null,
+    "headsign": null
+   },
+   {
+    "scheduledRideId": "3390847b-4b8f-4a79-9890-4f8b4cfb5aad",
+    "routeServiceId": "99925de0-8766-4c54-9fad-38a37426bc78",
+    "stops": [
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "11:25:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOrPickup",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "11:45:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "11:45:05",
+      "waitTimeSec": 10,
+      "visitType": "PickupOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "12:05:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     }
+    ],
+    "gtfsId": null,
+    "blockId": null,
+    "shortName": null,
+    "tags": [],
+    "reservedSeating": false,
+    "capacity": null,
+    "bicycleCapacity": null,
+    "wheelchairCapacity": null,
+    "seatsPerWheelchair": null,
+    "hanoverDestinationCode": null,
+    "luminatorDestinationA": null,
+    "luminatorRunNumber": null,
+    "twinVisionDestinationCode": null,
+    "transignDestinationCode": null,
+    "transignEntryId": null,
+    "headsign": null
+   },
+   {
+    "scheduledRideId": "227d10d9-3707-402a-92c4-77d9f5c5919e",
+    "routeServiceId": "99925de0-8766-4c54-9fad-38a37426bc78",
+    "stops": [
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "12:45:05",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOrPickup",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "13:05:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     null,
+     null
+    ],
+    "gtfsId": null,
+    "blockId": null,
+    "shortName": null,
+    "tags": [],
+    "reservedSeating": false,
+    "capacity": null,
+    "bicycleCapacity": null,
+    "wheelchairCapacity": null,
+    "seatsPerWheelchair": null,
+    "hanoverDestinationCode": null,
+    "luminatorDestinationA": null,
+    "luminatorRunNumber": null,
+    "twinVisionDestinationCode": null,
+    "transignDestinationCode": null,
+    "transignEntryId": null,
+    "headsign": null
+   },
+   {
+    "scheduledRideId": "e49bec30-cfa0-4810-a0e7-8d478f7e9176",
+    "routeServiceId": "99925de0-8766-4c54-9fad-38a37426bc78",
+    "stops": [
+     null,
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "13:50:05",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "13:55:00",
+      "waitTimeSec": 10,
+      "visitType": "PickupOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "14:15:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     }
+    ],
+    "gtfsId": null,
+    "blockId": null,
+    "shortName": null,
+    "tags": [],
+    "reservedSeating": false,
+    "capacity": null,
+    "bicycleCapacity": null,
+    "wheelchairCapacity": null,
+    "seatsPerWheelchair": null,
+    "hanoverDestinationCode": null,
+    "luminatorDestinationA": null,
+    "luminatorRunNumber": null,
+    "twinVisionDestinationCode": null,
+    "transignDestinationCode": null,
+    "transignEntryId": null,
+    "headsign": null
+   },
+   {
+    "scheduledRideId": "4281a02b-b1e2-40e5-817a-7c9be61c0b96",
+    "routeServiceId": "99925de0-8766-4c54-9fad-38a37426bc78",
+    "stops": [
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "14:15:05",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOrPickup",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "14:35:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "14:35:05",
+      "waitTimeSec": 10,
+      "visitType": "PickupOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "14:55:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     }
+    ],
+    "gtfsId": null,
+    "blockId": null,
+    "shortName": null,
+    "tags": [],
+    "reservedSeating": false,
+    "capacity": null,
+    "bicycleCapacity": null,
+    "wheelchairCapacity": null,
+    "seatsPerWheelchair": null,
+    "hanoverDestinationCode": null,
+    "luminatorDestinationA": null,
+    "luminatorRunNumber": null,
+    "twinVisionDestinationCode": null,
+    "transignDestinationCode": null,
+    "transignEntryId": null,
+    "headsign": null
+   },
+   {
+    "scheduledRideId": "6e24e48c-0964-4409-b327-4e779aaa2d26",
+    "routeServiceId": "99925de0-8766-4c54-9fad-38a37426bc78",
+    "stops": [
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "14:55:05",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOrPickup",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "15:15:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "15:15:05",
+      "waitTimeSec": 10,
+      "visitType": "PickupOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "15:35:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     }
+    ],
+    "gtfsId": null,
+    "blockId": null,
+    "shortName": null,
+    "tags": [],
+    "reservedSeating": false,
+    "capacity": null,
+    "bicycleCapacity": null,
+    "wheelchairCapacity": null,
+    "seatsPerWheelchair": null,
+    "hanoverDestinationCode": null,
+    "luminatorDestinationA": null,
+    "luminatorRunNumber": null,
+    "twinVisionDestinationCode": null,
+    "transignDestinationCode": null,
+    "transignEntryId": null,
+    "headsign": null
+   },
+   {
+    "scheduledRideId": "f7f11119-9491-4485-8e95-9050766f219c",
+    "routeServiceId": "99925de0-8766-4c54-9fad-38a37426bc78",
+    "stops": [
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "15:35:05",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOrPickup",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "15:55:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "15:55:05",
+      "waitTimeSec": 10,
+      "visitType": "PickupOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "16:15:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     }
+    ],
+    "gtfsId": null,
+    "blockId": null,
+    "shortName": null,
+    "tags": [],
+    "reservedSeating": false,
+    "capacity": null,
+    "bicycleCapacity": null,
+    "wheelchairCapacity": null,
+    "seatsPerWheelchair": null,
+    "hanoverDestinationCode": null,
+    "luminatorDestinationA": null,
+    "luminatorRunNumber": null,
+    "twinVisionDestinationCode": null,
+    "transignDestinationCode": null,
+    "transignEntryId": null,
+    "headsign": null
+   },
+   {
+    "scheduledRideId": "cc6a26fa-0cfa-4b21-ab6c-34960163a413",
+    "routeServiceId": "99925de0-8766-4c54-9fad-38a37426bc78",
+    "stops": [
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "16:15:05",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOrPickup",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "16:35:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "16:45:00",
+      "waitTimeSec": 10,
+      "visitType": "PickupOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "17:05:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     }
+    ],
+    "gtfsId": null,
+    "blockId": null,
+    "shortName": null,
+    "tags": [],
+    "reservedSeating": false,
+    "capacity": null,
+    "bicycleCapacity": null,
+    "wheelchairCapacity": null,
+    "seatsPerWheelchair": null,
+    "hanoverDestinationCode": null,
+    "luminatorDestinationA": null,
+    "luminatorRunNumber": null,
+    "twinVisionDestinationCode": null,
+    "transignDestinationCode": null,
+    "transignEntryId": null,
+    "headsign": null
+   },
+   {
+    "scheduledRideId": "54764a0c-a0c2-42a5-8fbb-92b4bfb92b0d",
+    "routeServiceId": "99925de0-8766-4c54-9fad-38a37426bc78",
+    "stops": [
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "17:05:05",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOrPickup",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "17:25:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "17:25:05",
+      "waitTimeSec": 10,
+      "visitType": "PickupOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "17:45:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     }
+    ],
+    "gtfsId": null,
+    "blockId": null,
+    "shortName": null,
+    "tags": [],
+    "reservedSeating": false,
+    "capacity": null,
+    "bicycleCapacity": null,
+    "wheelchairCapacity": null,
+    "seatsPerWheelchair": null,
+    "hanoverDestinationCode": null,
+    "luminatorDestinationA": null,
+    "luminatorRunNumber": null,
+    "twinVisionDestinationCode": null,
+    "transignDestinationCode": null,
+    "transignEntryId": null,
+    "headsign": null
+   },
+   {
+    "scheduledRideId": "6d86672c-576e-4613-b6fc-db9960dc24af",
+    "routeServiceId": "99925de0-8766-4c54-9fad-38a37426bc78",
+    "stops": [
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "17:45:05",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOrPickup",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "18:05:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "18:05:05",
+      "waitTimeSec": 10,
+      "visitType": "PickupOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "18:25:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     }
+    ],
+    "gtfsId": null,
+    "blockId": null,
+    "shortName": null,
+    "tags": [],
+    "reservedSeating": false,
+    "capacity": null,
+    "bicycleCapacity": null,
+    "wheelchairCapacity": null,
+    "seatsPerWheelchair": null,
+    "hanoverDestinationCode": null,
+    "luminatorDestinationA": null,
+    "luminatorRunNumber": null,
+    "twinVisionDestinationCode": null,
+    "transignDestinationCode": null,
+    "transignEntryId": null,
+    "headsign": null
+   },
+   {
+    "scheduledRideId": "a27b7f24-6afb-4d9b-a462-3dc969808d31",
+    "routeServiceId": "99925de0-8766-4c54-9fad-38a37426bc78",
+    "stops": [
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "18:25:05",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOrPickup",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "18:45:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     null,
+     null
+    ],
+    "gtfsId": null,
+    "blockId": null,
+    "shortName": null,
+    "tags": [],
+    "reservedSeating": false,
+    "capacity": null,
+    "bicycleCapacity": null,
+    "wheelchairCapacity": null,
+    "seatsPerWheelchair": null,
+    "hanoverDestinationCode": null,
+    "luminatorDestinationA": null,
+    "luminatorRunNumber": null,
+    "twinVisionDestinationCode": null,
+    "transignDestinationCode": null,
+    "transignEntryId": null,
+    "headsign": null
+   },
+   {
+    "scheduledRideId": "593d0ab4-e1b8-4246-b19e-594a84862a05",
+    "routeServiceId": "99925de0-8766-4c54-9fad-38a37426bc78",
+    "stops": [
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "19:55:05",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOrPickup",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "20:15:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "20:15:05",
+      "waitTimeSec": 10,
+      "visitType": "PickupOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "20:35:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     }
+    ],
+    "gtfsId": null,
+    "blockId": null,
+    "shortName": null,
+    "tags": [],
+    "reservedSeating": false,
+    "capacity": null,
+    "bicycleCapacity": null,
+    "wheelchairCapacity": null,
+    "seatsPerWheelchair": null,
+    "hanoverDestinationCode": null,
+    "luminatorDestinationA": null,
+    "luminatorRunNumber": null,
+    "twinVisionDestinationCode": null,
+    "transignDestinationCode": null,
+    "transignEntryId": null,
+    "headsign": null
+   },
+   {
+    "scheduledRideId": "4323edb1-d154-4ba0-9a56-ba6dd9e1a221",
+    "routeServiceId": "99925de0-8766-4c54-9fad-38a37426bc78",
+    "stops": [
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "20:35:05",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOrPickup",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "20:55:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "20:55:05",
+      "waitTimeSec": 10,
+      "visitType": "PickupOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "21:15:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     }
+    ],
+    "gtfsId": null,
+    "blockId": null,
+    "shortName": null,
+    "tags": [],
+    "reservedSeating": false,
+    "capacity": null,
+    "bicycleCapacity": null,
+    "wheelchairCapacity": null,
+    "seatsPerWheelchair": null,
+    "hanoverDestinationCode": null,
+    "luminatorDestinationA": null,
+    "luminatorRunNumber": null,
+    "twinVisionDestinationCode": null,
+    "transignDestinationCode": null,
+    "transignEntryId": null,
+    "headsign": null
+   },
+   {
+    "scheduledRideId": "dd15e37b-dd57-4860-a5aa-9516812b794a",
+    "routeServiceId": "99925de0-8766-4c54-9fad-38a37426bc78",
+    "stops": [
+     null,
+     null,
+     {
+      "stop": "ed1e77b3-0708-4eda-9f42-00bd897ab70b",
+      "arrivalTime": "13:05:05",
+      "waitTimeSec": 10,
+      "visitType": "PickupOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     },
+     {
+      "stop": "37fb377f-6170-4948-9560-9fd3569c30b4",
+      "arrivalTime": "13:25:00",
+      "waitTimeSec": 10,
+      "visitType": "DropOffOnly",
+      "timepoint": true,
+      "byRequest": "AlwaysVisit"
+     }
+    ],
+    "gtfsId": null,
+    "blockId": null,
+    "shortName": null,
+    "tags": [],
+    "reservedSeating": false,
+    "capacity": null,
+    "bicycleCapacity": null,
+    "wheelchairCapacity": null,
+    "seatsPerWheelchair": null,
+    "hanoverDestinationCode": null,
+    "luminatorDestinationA": null,
+    "luminatorRunNumber": null,
+    "twinVisionDestinationCode": null,
+    "transignDestinationCode": null,
+    "transignEntryId": null,
+    "headsign": null
+   }
+  ]
+ ],
+ "routes": [
+  {
+   "routeId": "22443444-e127-4e40-8927-a3192e750369",
+   "regionId": "ca558ddc-d7f2-4b48-9cac-deea1134f820",
+   "name": "Red Line",
+   "headsign": "Red Line",
+   "announcedAs": "Red Line",
+   "shortName": "RL",
+   "color": "#F90101",
+   "lateNoticeWarnTimeSec": 300,
+   "inbound": true,
+   "groupId": null,
+   "publicName": "Red Line",
+   "headsignAesys": null,
+   "headsignHanover": null,
+   "luminatorRouteCode": null,
+   "enableExternalSignAwayFromStop": null,
+   "gtfsId": null,
+   "description": "",
+   "defaultSfmtaRouteName": null,
+   "routeUrl": "https://www.rochester.edu/parking/shuttles/",
+   "fareClassId": null,
+   "visibilityClass": null,
+   "routeType": "Bus",
+   "nominalHeadwayTime": null,
+   "enableReservationsPrepurchasePasses": false,
+   "avaConfig": null,
+   "inboundDirectionName": null,
+   "outboundDirectionName": null
+  }
+ ]
+}

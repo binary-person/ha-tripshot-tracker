@@ -1,0 +1,7 @@
+nocommit/
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+.DS_Store
+docs-apk/graph.json

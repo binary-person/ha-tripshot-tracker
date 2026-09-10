@@ -1,0 +1,67 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "TripShot transit system",
+        "description": "Choose the transit system to track. Only public timetable and bus-position data is read; no sign-in is required or possible.",
+        "data": {
+          "instance_name": "Transit system"
+        }
+      },
+      "route": {
+        "title": "Route",
+        "description": "Choose the line to track on {instance}.",
+        "data": {
+          "route_id": "Route"
+        }
+      },
+      "settings": {
+        "title": "Adherence settings",
+        "description": "A bus counts as arriving on time if it arrives within the early buffer before its scheduled arrival, and as departing on time if it leaves within the late buffer after its scheduled departure. These apply to every stop on the route. The timezone must be the transit system's own \u2014 timetable times and the service day are local to the buses, not to Home Assistant.",
+        "data": {
+          "arrival_early_buffer_sec": "Arrival buffer, toward early (seconds)",
+          "departure_late_buffer_sec": "Departure buffer, toward late (seconds)",
+          "geofence_diameter_ft": "Stop geofence diameter (feet)",
+          "position_max_age_sec": "Ignore bus positions older than (seconds)",
+          "poll_interval_sec": "Poll interval (seconds)",
+          "timezone": "Transit system timezone \u2014 the timezone the BUSES run in, not where Home Assistant is. Defaults to Home Assistant's.",
+          "measurement_grace_sec": "Measurement grace (seconds) \u2014 tolerance on the strict side of both windows. Leave at -1 to follow the poll interval automatically (recommended); a value of 0 or more is used exactly as given.",
+          "confirm_polls": "Consecutive polls that must agree before a geofence crossing counts. Set 1 to act on the first poll (no debouncing); 2 ignores a bus flickering across the boundary. The crossing is timestamped at the first poll that saw it either way, so this costs no accuracy."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Could not reach the TripShot API.",
+      "unknown_instance": "That transit system is no longer listed.",
+      "unknown_route": "That route is no longer listed.",
+      "invalid_timezone": "Not a recognised timezone name. Use an IANA name such as America/New_York."
+    },
+    "abort": {
+      "cannot_connect": "Could not reach the TripShot API.",
+      "no_instances": "No public transit systems were advertised.",
+      "no_routes": "This transit system advertises no public routes today.",
+      "already_configured": "This transit system and route are already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Adherence settings",
+        "description": "Retune the buffers, geofence and timezone. Changes apply immediately; entities and their accumulated counters are not affected.",
+        "data": {
+          "arrival_early_buffer_sec": "Arrival buffer, toward early (seconds)",
+          "departure_late_buffer_sec": "Departure buffer, toward late (seconds)",
+          "geofence_diameter_ft": "Stop geofence diameter (feet)",
+          "position_max_age_sec": "Ignore bus positions older than (seconds)",
+          "poll_interval_sec": "Poll interval (seconds)",
+          "timezone": "Transit system timezone \u2014 the timezone the BUSES run in, not where Home Assistant is. Defaults to Home Assistant's.",
+          "measurement_grace_sec": "Measurement grace (seconds) \u2014 tolerance on the strict side of both windows. Leave at -1 to follow the poll interval automatically (recommended); a value of 0 or more is used exactly as given.",
+          "confirm_polls": "Consecutive polls that must agree before a geofence crossing counts. Set 1 to act on the first poll (no debouncing); 2 ignores a bus flickering across the boundary. The crossing is timestamped at the first poll that saw it either way, so this costs no accuracy."
+        }
+      }
+    },
+    "error": {
+      "invalid_timezone": "Not a recognised timezone name. Use an IANA name such as America/New_York."
+    }
+  }
+}

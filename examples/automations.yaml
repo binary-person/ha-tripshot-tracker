@@ -1,0 +1,336 @@
+# TripShot Tracker — example automations.
+#
+# This file is in the format Home Assistant's `automations.yaml` uses: a plain
+# list, with no top-level `automation:` key. See examples/README.md for how to
+# install them.
+#
+# CHOOSING WHERE ALERTS GO
+#
+# Every action below is `notify.persistent_notification`, which needs no setup
+# and posts to the Home Assistant sidebar. It takes the same `title` and
+# `message` fields as a phone or a notify group, so redirecting an alert is a
+# one-word change -- only the action name differs:
+#
+#     notify.persistent_notification      sidebar (default, no setup)
+#     notify.mobile_app_<device>          one phone, via the Companion app
+#     notify.transit_alerts               a group you define once, see below
+#
+# To find the exact name yours has: Developer tools -> Actions, type "notify.".
+#
+# To change the target in ONE place rather than editing every automation,
+# define a notify group in configuration.yaml and point everything at it:
+#
+#     notify:
+#       - platform: group
+#         name: transit_alerts
+#         services:
+#           - action: mobile_app_your_phone     # name only, no "notify." prefix
+#           - action: persistent_notification
+#
+# then replace notify.persistent_notification with notify.transit_alerts
+# throughout. Changing who gets alerted afterwards means editing the group.
+#
+# Event data available on tripshot_tracker_event:
+#
+#   route, route_id          the line
+#   stop, stop_id            the stop
+#   verdict                  arrive_early | arrive_on_time | arrive_late
+#                            depart_early | depart_on_time | depart_late
+#   kind                     arrival | departure
+#   punctuality              early | on_time | late
+#   bus, vehicle_id          fleet number, e.g. "2603"
+#   scheduled, actual        ISO-8601, UTC
+#   deviation_seconds        signed: negative is early, positive is late
+#   deviation_minutes        the same, in minutes, to one decimal
+#
+# deviation_seconds is for describing what happened, not for deciding whether
+# it counts. Early, on time and late are defined by the buffers and the
+# measurement grace in the integration's own settings; a threshold here would
+# be a second definition that disagrees with the counters. If a verdict fires
+# more readily than you want, widen the buffer or the grace.
+
+# ---------------------------------------------------------------------------
+# FILTERING
+#
+# Every key under event_data must match exactly. Every key left out matches
+# anything. So a filter is built by adding keys, not by writing conditions.
+#
+# Values for this deployment:
+#
+#   route: Red Line       stops: Eastman Living Center
+#                                Rush Rhees Library Back Side
+#
+#   route: Orange Line    stops: Rush Rhees Library Back Side, Towers,
+#                                Mt. Hope/Gregory, Gregory & South,
+#                                South Clinton & Alexander, Monroe & Alexander,
+#                                Monroe/Goodman, Park/Culver, east/ Barrington,
+#                                Memorial Art Gallery (MAG),
+#                                East Ave. / Alexander, Eastman Living Center,
+#                                Innovation Square, Erie Habor Apts.,
+#                                Mt.Hope/McLean
+#
+# Copy names exactly, including the stray space in "east/ Barrington" and the
+# spelling of "Erie Habor Apts." -- both are as the operator publishes them.
+#
+# Red Line and Orange Line both serve Eastman Living Center and Rush Rhees
+# Library Back Side, so a filter on stop alone matches both lines.
+# ---------------------------------------------------------------------------
+
+- id: tripshot_early_any
+  alias: Transit - early departure, any route or stop
+  description: No route or stop key, so every tracked line and stop matches.
+  mode: queued
+  max: 10
+  triggers:
+    - trigger: event
+      event_type: tripshot_tracker_event
+      event_data:
+        verdict: depart_early
+  actions:
+    - action: notify.persistent_notification   # <- change target here
+      data:
+        title: "{{ trigger.event.data.route }} left early"
+        message: >-
+          Bus {{ trigger.event.data.bus }} left {{ trigger.event.data.stop }}
+          {{ (trigger.event.data.deviation_seconds / -60) | round(1) }} minutes
+          early.
+
+- id: tripshot_early_one_route
+  alias: Transit - early departure, one route
+  description: One route, every stop it serves.
+  mode: queued
+  max: 10
+  triggers:
+    - trigger: event
+      event_type: tripshot_tracker_event
+      event_data:
+        route: Red Line
+        verdict: depart_early
+  actions:
+    - action: notify.persistent_notification   # <- change target here
+      data:
+        title: Red Line left early
+        message: >-
+          Left {{ trigger.event.data.stop }}
+          {{ (trigger.event.data.deviation_seconds / -60) | round(1) }} minutes
+          early.
+
+- id: tripshot_early_one_stop_one_route
+  alias: Transit - early departure, one stop on one route
+  description: The narrowest form. Both keys present, so only this pairing matches.
+  mode: queued
+  max: 10
+  triggers:
+    - trigger: event
+      event_type: tripshot_tracker_event
+      event_data:
+        route: Red Line
+        stop: Rush Rhees Library Back Side
+        verdict: depart_early
+  actions:
+    - action: notify.persistent_notification   # <- change target here
+      data:
+        title: Red Line left Rush Rhees early
+        message: >-
+          {{ (trigger.event.data.deviation_seconds / -60) | round(1) }} minutes
+          early.
+
+- id: tripshot_early_one_stop_any_route
+  alias: Transit - early departure, one stop, any route
+  description: >-
+    No route key, so this fires for every line calling at the stop. At Rush
+    Rhees that is both the Red and Orange lines.
+  mode: queued
+  max: 10
+  triggers:
+    - trigger: event
+      event_type: tripshot_tracker_event
+      event_data:
+        stop: Rush Rhees Library Back Side
+        verdict: depart_early
+  actions:
+    - action: notify.persistent_notification   # <- change target here
+      data:
+        title: "{{ trigger.event.data.route }} left Rush Rhees early"
+        message: >-
+          {{ (trigger.event.data.deviation_seconds / -60) | round(1) }} minutes
+          early.
+
+- id: tripshot_early_several_routes
+  alias: Transit - early departure, several routes
+  description: >-
+    event_data holds one value per key, so a set needs a condition. Trigger on
+    the parts that are fixed, then narrow.
+  mode: queued
+  max: 10
+  triggers:
+    - trigger: event
+      event_type: tripshot_tracker_event
+      event_data:
+        verdict: depart_early
+  conditions:
+    - condition: template
+      value_template: >-
+        {{ trigger.event.data.route in ['Red Line', 'Orange Line'] }}
+  actions:
+    - action: notify.persistent_notification   # <- change target here
+      data:
+        title: "{{ trigger.event.data.route }} left early"
+        message: "Left {{ trigger.event.data.stop }} ahead of schedule."
+
+- id: tripshot_early_several_stops
+  alias: Transit - early departure, several stops on one route
+  description: The same shape, applied to a set of stops.
+  mode: queued
+  max: 10
+  triggers:
+    - trigger: event
+      event_type: tripshot_tracker_event
+      event_data:
+        route: Orange Line
+        verdict: depart_early
+  conditions:
+    - condition: template
+      value_template: >-
+        {{ trigger.event.data.stop in ['Towers',
+                                       'Mt. Hope/Gregory',
+                                       'Memorial Art Gallery (MAG)'] }}
+  actions:
+    - action: notify.persistent_notification   # <- change target here
+      data:
+        title: Orange Line left early
+        message: "Left {{ trigger.event.data.stop }} ahead of schedule."
+
+- id: tripshot_late_arrival_one_stop
+  alias: Transit - late arrival at one stop
+  description: >-
+    Filtering is not limited to route and stop. kind and punctuality are the
+    two halves of verdict; use whichever reads better.
+  mode: queued
+  max: 10
+  triggers:
+    - trigger: event
+      event_type: tripshot_tracker_event
+      event_data:
+        route: Red Line
+        stop: Eastman Living Center
+        kind: arrival
+        punctuality: late
+  actions:
+    - action: notify.persistent_notification   # <- change target here
+      data:
+        title: Red Line arrived late at Eastman
+        message: >-
+          {{ (trigger.event.data.deviation_seconds / 60) | round(1) }} minutes
+          late.
+
+- id: tripshot_follow_one_bus
+  alias: Transit - follow a single vehicle
+  description: Any field in the event can be filtered, including the fleet number.
+  mode: queued
+  max: 10
+  triggers:
+    - trigger: event
+      event_type: tripshot_tracker_event
+      event_data:
+        bus: "2603"
+  actions:
+    - action: notify.persistent_notification   # <- change target here
+      data:
+        title: "Bus 2603"
+        message: >-
+          {{ trigger.event.data.kind }} at {{ trigger.event.data.stop }} was
+          {{ trigger.event.data.punctuality }}.
+
+# ---------------------------------------------------------------------------
+# OTHER USES
+# ---------------------------------------------------------------------------
+
+- id: tripshot_off_schedule_logbook
+  alias: Transit - record anything off schedule
+  description: >-
+    Write every late arrival and early or late departure to the logbook,
+    building a history without sending notifications.
+  mode: queued
+  max: 20
+  triggers:
+    - trigger: event
+      event_type: tripshot_tracker_event
+  conditions:
+    - condition: template
+      value_template: "{{ trigger.event.data.punctuality != 'on_time' }}"
+  actions:
+    - action: logbook.log
+      data:
+        name: "{{ trigger.event.data.route }}"
+        message: >-
+          Bus {{ trigger.event.data.bus }} {{ trigger.event.data.kind }} at
+          {{ trigger.event.data.stop }} was
+          {{ trigger.event.data.punctuality }} by
+          {{ trigger.event.data.deviation_seconds | abs }} seconds.
+
+- id: tripshot_early_during_commute
+  alias: Transit - early departure during commute hours
+  description: >-
+    Only notify when it could affect a journey being planned.
+  mode: single
+  triggers:
+    - trigger: event
+      event_type: tripshot_tracker_event
+      event_data:
+        verdict: depart_early
+  conditions:
+    - condition: time
+      after: "07:30:00"
+      before: "09:00:00"
+      weekday: [mon, tue, wed, thu, fri]
+  actions:
+    - action: notify.persistent_notification   # <- change target here
+      data:
+        title: Bus left early
+        message: >-
+          {{ trigger.event.data.route }} left {{ trigger.event.data.stop }}
+          ahead of schedule.
+
+- id: tripshot_no_buses_running
+  alias: Transit - no buses reporting
+  description: >-
+    Catch a feed outage. The one-hour delay avoids firing during the normal
+    gaps between runs; shorten it for a route with tighter headways.
+  mode: single
+  triggers:
+    - trigger: numeric_state
+      entity_id: sensor.red_line_buses
+      below: 1
+      for: "01:00:00"
+  conditions:
+    - condition: time
+      after: "07:00:00"
+      before: "20:00:00"
+      weekday: [mon, tue, wed, thu, fri]
+  actions:
+    - action: notify.persistent_notification   # <- change target here
+      data:
+        title: "Red Line: no buses reporting"
+        message: >-
+          No bus has reported a recent position for an hour during service
+          hours. Check the integration's logs or the operator's feed.
+
+- id: tripshot_daily_summary
+  alias: Transit - daily punctuality summary
+  description: >-
+    Post one summary each evening from the counter entities. Adjust the entity
+    ids to match your own; they are listed under each stop's device.
+  mode: single
+  triggers:
+    - trigger: time
+      at: "21:30:00"
+  actions:
+    - action: notify.persistent_notification   # <- change target here
+      data:
+        title: Red Line punctuality today
+        message: >-
+          Rush Rhees: {{ states('sensor.rush_rhees_library_back_side_depart_on_time') }}
+          on time, {{ states('sensor.rush_rhees_library_back_side_depart_early') }}
+          early, {{ states('sensor.rush_rhees_library_back_side_depart_late') }}
+          late.

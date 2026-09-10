@@ -1,0 +1,51 @@
+name: Validate
+
+on:
+  push:
+  pull_request:
+  schedule:
+    # Weekly, so a Home Assistant release that deprecates something we use
+    # shows up here rather than in someone's log.
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+jobs:
+  hassfest:
+    name: hassfest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: home-assistant/actions/hassfest@master
+
+  hacs:
+    name: HACS
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hacs/action@main
+        with:
+          category: integration
+
+  tests:
+    name: tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install pytest pytest-homeassistant-custom-component
+      - run: pytest tests/ -q
+
+  derive:
+    name: docs graph
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      # The APK tree is gitignored, so APK refs report as unverifiable here.
+      # The structural checks - doc ids, dependencies, code citations, section
+      # anchors - all still run and still fail the build.
+      - run: python3 tools/derive.py
