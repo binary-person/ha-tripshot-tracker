@@ -246,5 +246,7 @@ or supported by TripShot, Inc. or the University of Rochester.**
 operator's. Those names appear here only to identify the service this software
 interoperates with — there is no other way to say what it does.
 
-No third-party logo or brand asset is shipped. The icon is original work, MIT
-licensed with the rest of the source. See [`NOTICE`](NOTICE).
+The integration's icon reproduces TripShot's own, so Home Assistant shows a
+recognisable icon for the service rather than a placeholder. It is **not**
+covered by this project's MIT licence — see the scope note in
+[`LICENSE`](LICENSE) and [`NOTICE`](NOTICE).

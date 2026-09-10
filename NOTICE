@@ -1,27 +1,52 @@
 TripShot Tracker
 Copyright (c) 2026 Simon Cheng
 
-This project is licensed under the MIT License (see LICENSE).
+Licensed under the MIT License, with one exception -- see SCOPE in LICENSE and
+"Brand assets" below.
+
+
+AFFILIATION
+-----------
+
+This project is an independent, unofficial integration. It is not affiliated
+with, sponsored by, endorsed by, or supported by TripShot, Inc. or the
+University of Rochester.
+
 
 TRADEMARKS
 ----------
 
-"TripShot" is a trademark of TripShot, Inc. "University of Rochester" and the
-names of its shuttle routes are marks of the University of Rochester.
+"TripShot" and the TripShot icon are trademarks of TripShot, Inc. "University
+of Rochester" and its shuttle route names are marks of the University of
+Rochester.
 
-This project is an independent, unofficial integration. It is not affiliated
-with, sponsored by, endorsed by, or supported by TripShot, Inc. or the
-University of Rochester. Those names are used here solely to identify the
-service this software interoperates with, which is the only way to describe
-what it does.
+Those names are used here solely to identify the service this software
+interoperates with, which is the only way to describe what it does. No claim
+is made to them, and no endorsement is implied.
 
-No trademark, service mark, logo, or other brand asset of any third party is
-distributed with this project. The integration's icon is an original work
-created for this project and is covered by the MIT License along with the rest
-of the source.
 
-SCOPE
------
+BRAND ASSETS
+------------
+
+    custom_components/tripshot_tracker/brand/
+
+reproduces TripShot's icon, taken from the publicly distributed Android client.
+It is present so that Home Assistant displays the correct, recognisable icon
+for the service being integrated, rather than a generic placeholder that could
+leave a user unsure which service the integration talks to.
+
+Since Home Assistant 2026.3.0 a custom component ships its own brand icons
+directly; the custom_integrations folder of the home-assistant/brands
+repository is now marked legacy. This is therefore the supported location for
+them.
+
+These files are NOT covered by this project's MIT License. They remain the
+property of TripShot, Inc. Anyone redistributing or forking this project takes
+on the same considerations regarding their use.
+
+
+SCOPE OF THIS PROJECT
+---------------------
 
 This project reads only public, unauthenticated endpoints -- the same ones the
 vendor's own application uses without a signed-in user. It sends no
@@ -30,9 +55,13 @@ credentials, implements no authentication, and circumvents no access control.
 The documentation under docs-apk/ describes those endpoints as observed in the
 vendor's publicly distributed Android client, and quotes short excerpts of
 decompiled code as evidence for specific factual claims. Those excerpts remain
-the property of their copyright holder and are reproduced for the purpose of
-interoperability and accuracy of documentation.
+the property of their copyright holder and are reproduced for the purposes of
+interoperability and of showing the working behind each claim.
+
+
+CONTACT
+-------
 
 If you are a rights holder and object to anything here, please open an issue at
 https://github.com/binary-person/ha-tripshot-tracker/issues and it will be
-addressed.
+addressed promptly.

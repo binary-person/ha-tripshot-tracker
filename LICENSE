@@ -1,3 +1,16 @@
+SCOPE
+=====
+
+The MIT License below applies to every file in this repository EXCEPT the
+contents of:
+
+    custom_components/tripshot_tracker/brand/
+
+Those files reproduce TripShot's icon, which is the trademark of TripShot, Inc.
+They are included so Home Assistant can display the correct icon for the
+service this integration talks to. They are NOT licensed under the MIT License
+and are NOT the property of this project. See NOTICE.
+
 MIT License
 
 Copyright (c) 2026 Simon Cheng
