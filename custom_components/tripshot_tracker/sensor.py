@@ -14,12 +14,14 @@ doc: semantics.time-locality#firing-cases
 
 from __future__ import annotations
 
+import inspect
 import logging
 from dataclasses import dataclass
 
 from homeassistant.components.sensor import SensorEntity, SensorStateClass
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -31,6 +33,21 @@ from .coordinator import TripShotCoordinator
 from .locality import COUNTED_STATES, TimeLocality
 
 _LOGGER = logging.getLogger(__name__)
+
+#: Home Assistant renamed the parent-device parameter: `via_device`, taking an
+#: identifiers tuple, became `via_device_id`, taking a device registry id.
+#: Neither name works across the versions this integration supports — 2026.2
+#: rejects `via_device_id`, and 2026.9 no longer accepts `via_device` — so the
+#: supported spelling is detected rather than chosen.
+_VIA_DEVICE_ID_SUPPORTED = "via_device_id" in inspect.signature(
+    dr.DeviceRegistry.async_get_or_create).parameters
+
+
+def _via_route_device(coordinator, entry: ConfigEntry) -> dict[str, object]:
+    """The parent-device key this Home Assistant understands."""
+    if _VIA_DEVICE_ID_SUPPORTED:
+        return {"via_device_id": coordinator.route_device_id}
+    return {"via_device": (DOMAIN, entry.entry_id)}
 
 STATE_LABELS: dict[TimeLocality, str] = {
     TimeLocality.ARRIVE_EARLY: "Arrive early",
@@ -141,10 +158,9 @@ class _StopEntity(_Base):
             name=f"{self.coordinator.route_name} {self._stop_name}",
             manufacturer="TripShot",
             model="Stop",
-            # via_device_id, not via_device: the latter is deprecated and
-            # scheduled for removal. The route device is created explicitly
-            # during setup so its id is known here.
-            via_device_id=self.coordinator.route_device_id,
+            # The route device is created explicitly during setup, so its id
+            # is known here and the link does not depend on entity ordering.
+            **_via_route_device(self.coordinator, self._entry),
         )
 
 
