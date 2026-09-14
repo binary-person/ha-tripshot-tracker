@@ -23,7 +23,7 @@ Do not break either. If you learn something new about the API, document it in
 ```bash
 python3 -m venv .venv
 .venv/bin/pip install pytest pytest-homeassistant-custom-component
-.venv/bin/python -m pytest tests/ -q     # 301 tests
+.venv/bin/python -m pytest tests/ -q     # 371 tests
 python3 tools/derive.py                  # graph + drift check, must say "no drift"
 ```
 
@@ -124,9 +124,18 @@ ids or anchors, and duplicate `## N.` section numbers.
 Two suites, one command:
 
 - **Logic** (`test_locality`, `test_schedule`, `test_tracker`,
-  `test_observations`, `test_models`, `test_endpoints`, `test_layering`) —
-  needs only `pytest`. `test_config_schema` additionally needs Home Assistant
-  and skips without it.
+  `test_observations`, `test_models`, `test_endpoints`, `test_layering`,
+  `test_static`) — needs only `pytest`.
+- **Wiring** (`test_ha_setup`, `test_ha_event`, `test_api_http`,
+  `test_config_flow`, `test_coordinator_paths`, `test_entity_lifecycle`,
+  `test_diagnostics`, `test_config_schema`) — needs
+  `pytest-homeassistant-custom-component`.
+
+Coverage is gated at 90% in CI. That floor exists because a NameError shipped
+in the event-firing path: the logic tests stopped at the tracker returning a
+verdict and the setup tests stopped at entities existing, so nothing ever
+executed the line. **A runtime path with no test is how bugs leave this
+repo** — if you add one, execute it.
   `tests/conftest.py` binds the package as a synthetic `tsx` module so the pure
   modules import without Home Assistant.
 - **Wiring** (`test_ha_setup`) — needs
@@ -166,6 +175,7 @@ worth reading because they show the shape of mistake this codebase invites.
 | Integration would not load at all | `async_timeout` is not a Home Assistant dependency | stdlib `asyncio.timeout` |
 | Weekend install failed setup entirely | A day the route does not run returns an empty bundle, which was treated as an error | `stops_only()`, `TestNoServiceDay` |
 | Entity devices about to stop working | `via_device` in `DeviceInfo` is deprecated | explicit route device + `via_device_id`, `test_ha_setup.py` |
+| Automations never fired | `CountedVerdict.is_arrival` called a deleted `_is_arrival`, so every verdict raised NameError *after* bumping the counter — counters rose, no event ever reached the bus | `test_ha_event.py` drives a real visit and captures the bus; `test_static.py` runs pyflakes |
 
 Two general lessons from that list: **the API answers HTTP 200 for several
 distinct failures**, so check the shape of a response and not just its status;

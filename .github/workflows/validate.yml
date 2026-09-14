@@ -34,8 +34,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
-      - run: pip install pytest pytest-homeassistant-custom-component pyflakes
-      - run: pytest tests/ -q
+      - run: pip install pytest pytest-homeassistant-custom-component pyflakes pytest-cov
+      # The gate is not vanity. The integration shipped a NameError in the
+      # event-firing path because nothing executed that line; a floor on
+      # coverage is what stops a runtime path going unexercised again.
+      - run: >-
+          pytest tests/ -q
+          --cov=custom_components.tripshot_tracker
+          --cov-report=term-missing
+          --cov-fail-under=90
 
   derive:
     name: docs graph
