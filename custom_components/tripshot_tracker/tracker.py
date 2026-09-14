@@ -51,6 +51,15 @@ class Observation:
     geo: GeoLocality
 
 
+def _is_arrival(state: TimeLocality) -> bool:
+    """Whether a verdict describes an arrival rather than a departure."""
+    return state in (
+        TimeLocality.ARRIVE_EARLY,
+        TimeLocality.ARRIVE_ON_TIME,
+        TimeLocality.ARRIVE_LATE,
+    )
+
+
 @dataclass(frozen=True)
 class CountedVerdict:
     """A verdict at the moment it was counted, with enough context to act on.
