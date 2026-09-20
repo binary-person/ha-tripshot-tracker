@@ -70,8 +70,8 @@ async def test_entities_are_created(hass: HomeAssistant, bundle, live) -> None:
     entry = await setup_entry(hass, bundle, live)
     mine = er.async_entries_for_config_entry(
         er.async_get(hass), entry.entry_id)
-    # 2 stops x (6 counters + 1 state) + Buses + Schedule health
-    assert len(mine) == 16, [e.entity_id for e in mine]
+    # 2 stops x (6 counters + state + deviation) + Buses + Schedule health
+    assert len(mine) == 18, [e.entity_id for e in mine]
 
 
 async def test_every_entity_is_attached_to_a_device(

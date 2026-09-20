@@ -23,7 +23,7 @@ Do not break either. If you learn something new about the API, document it in
 ```bash
 python3 -m venv .venv
 .venv/bin/pip install pytest pytest-homeassistant-custom-component
-.venv/bin/python -m pytest tests/ -q     # 371 tests
+.venv/bin/python -m pytest tests/ -q     # 390 tests
 python3 tools/derive.py                  # graph + drift check, must say "no drift"
 ```
 

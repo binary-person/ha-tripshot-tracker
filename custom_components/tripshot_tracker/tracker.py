@@ -41,7 +41,14 @@ _LOGGER = logging.getLogger(__name__)
 
 @dataclass(frozen=True)
 class Observation:
-    """One sample of one (stop, bus) pair against one scheduled visit."""
+    """One sample of one (stop, bus) pair against one scheduled visit.
+
+    The windows say whether the bus is on time; the scheduled instants say by
+    how much it is off. They are not interchangeable — a window edge sits a
+    buffer or a measurement grace away from the instant it was built from, so
+    measuring deviation against an edge reports a bus that is exactly on time
+    as being off by the grace.
+    """
 
     stop_id: str
     vehicle_id: str
@@ -49,6 +56,9 @@ class Observation:
     arrival: TimeWindow
     departure: TimeWindow
     geo: GeoLocality
+    #: The scheduled instants the windows were built around.
+    scheduled_arrival: datetime
+    scheduled_departure: datetime
 
 
 def _is_arrival(state: TimeLocality) -> bool:
@@ -75,7 +85,8 @@ class CountedVerdict:
     verdict: TimeLocality
     at: datetime
     scheduled: datetime
-    #: Signed seconds from schedule. Negative is early, positive is late.
+    #: Signed seconds from the SCHEDULED instant -- not from a window edge.
+    #: Negative is early, positive is late, and zero means exactly on time.
     deviation_sec: float
 
     @property
@@ -89,6 +100,9 @@ class _Latch:
 
     state: TimeLocality = TimeLocality.NA
     departure: TimeWindow | None = None
+    #: Scheduled departure of the visit the arrival was judged against, pinned
+    #: alongside its window so a long dwell cannot drift onto the next visit.
+    scheduled_departure: datetime | None = None
     #: When this pair was last observed with a fresh position. Drives expiry.
     last_seen: datetime | None = None
     #: A geofence crossing seen but not yet confirmed by enough polls.
@@ -109,6 +123,9 @@ class RouteTracker:
     """Accumulates per-stop counters across every bus on a route."""
 
     counts: dict[str, dict[TimeLocality, int]] = field(default_factory=dict)
+    #: The most recent counted verdict per stop, for the deviation metric.
+    #: Counters say how often; this says by how much, and when.
+    latest: dict[str, CountedVerdict] = field(default_factory=dict)
     _latches: dict[tuple[str, str], _Latch] = field(default_factory=dict)
 
     # -- counter access ---------------------------------------------------
@@ -119,6 +136,10 @@ class RouteTracker:
 
     def count(self, stop_id: str, state: TimeLocality) -> int:
         return self.counts.get(stop_id, {}).get(state, 0)
+
+    def latest_for(self, stop_id: str) -> CountedVerdict | None:
+        """The most recent counted verdict at a stop, if there has been one."""
+        return self.latest.get(stop_id)
 
     def seed(self, stop_id: str, state: TimeLocality, value: int) -> None:
         """Restore a counter from Home Assistant's saved state.
@@ -163,6 +184,7 @@ class RouteTracker:
         """Clear everything. Not called automatically."""
         _LOGGER.info("resetting all counters and latches")
         self.counts.clear()
+        self.latest.clear()
         self._latches.clear()
 
     def expire_stale(self, now: datetime, grace_sec: float) -> int:
@@ -279,15 +301,18 @@ class RouteTracker:
         if observed_at_stop:
             verdict = time_locality(at, obs.arrival, obs.departure, obs.geo)
             latch.state = verdict
-            # Pin the departure window of the visit the arrival was judged
-            # against, so a long dwell cannot drift onto the next visit.
+            # Pin the departure of the visit the arrival was judged against,
+            # so a long dwell cannot drift onto the next visit.
             latch.departure = obs.departure
+            latch.scheduled_departure = obs.scheduled_departure
             self._bump(obs.stop_id, verdict)
-            emitted.append(CountedVerdict(
+            counted = CountedVerdict(
                 stop_id=obs.stop_id, vehicle_id=obs.vehicle_id,
-                verdict=verdict, at=at, scheduled=obs.arrival.end,
-                deviation_sec=(at - obs.arrival.end).total_seconds(),
-            ))
+                verdict=verdict, at=at, scheduled=obs.scheduled_arrival,
+                deviation_sec=(at - obs.scheduled_arrival).total_seconds(),
+            )
+            self.latest[obs.stop_id] = counted
+            emitted.append(counted)
             _LOGGER.info(
                 "bus %s arrived at %s: %s (at=%s, window=%s..%s)",
                 obs.vehicle_id, obs.stop_id, verdict.value, at.isoformat(),
@@ -295,13 +320,16 @@ class RouteTracker:
             )
         else:
             window = latch.departure or obs.departure
+            scheduled = latch.scheduled_departure or obs.scheduled_departure
             verdict = classify_departure(at, window)
             self._bump(obs.stop_id, verdict)
-            emitted.append(CountedVerdict(
+            counted = CountedVerdict(
                 stop_id=obs.stop_id, vehicle_id=obs.vehicle_id,
-                verdict=verdict, at=at, scheduled=window.start,
-                deviation_sec=(at - window.start).total_seconds(),
-            ))
+                verdict=verdict, at=at, scheduled=scheduled,
+                deviation_sec=(at - scheduled).total_seconds(),
+            )
+            self.latest[obs.stop_id] = counted
+            emitted.append(counted)
             _LOGGER.info(
                 "bus %s departed %s: %s (at=%s, window=%s..%s)",
                 obs.vehicle_id, obs.stop_id, verdict.value, at.isoformat(),
@@ -309,6 +337,7 @@ class RouteTracker:
             )
             latch.state = TimeLocality.NA
             latch.departure = None
+            latch.scheduled_departure = None
 
         latch.clear_pending()
         return emitted

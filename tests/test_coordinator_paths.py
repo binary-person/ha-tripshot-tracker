@@ -97,7 +97,7 @@ class TestNoServiceDay:
 
         entities = er.async_entries_for_config_entry(er.async_get(hass),
                                                      entry.entry_id)
-        assert len(entities) == 16
+        assert len(entities) == 18
 
     async def test_schedule_health_reports_it(
         self, hass: HomeAssistant, bundle, live

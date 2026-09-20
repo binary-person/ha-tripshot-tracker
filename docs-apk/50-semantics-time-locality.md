@@ -295,7 +295,41 @@ A crossing is therefore only acted on once `confirm_polls` consecutive
 observations agree, and is timestamped at the first of them. See
 [`51-semantics-geo-locality.md`](51-semantics-geo-locality.md#debounce).
 
-## 8. Sampling granularity
+## 8. Deviation
+<!-- anchor: deviation -->
+
+The counters say *how often* a bus was early, on time or late. The deviation
+says *by how much*, which is what makes a history graph of adherence useful.
+
+```
+deviation = observed instant − scheduled instant       (signed, seconds)
+```
+
+**Positive is late, negative is early, zero is exactly on time.**
+
+Measured from the scheduled instant itself, **not** from the edge of an
+adherence window. The distinction is not academic: a window edge sits a buffer
+or a measurement grace away from the instant it was built around, so measuring
+against one reports a perfectly punctual bus as off by that amount.
+
+> An earlier version did exactly that, using `arrival_window.end` and
+> `departure_window.start`. At the default grace of 46 s, a bus arriving
+> exactly on schedule reported **−46 s** and one departing exactly on schedule
+> reported **+46 s** — a constant offset in every plotted value, and in the
+> `deviation_seconds` carried by every event. `Observation` now carries the
+> scheduled instants alongside the windows, and
+> `tests/test_tracker.py::TestDeviationIsMeasuredFromTheSchedule` pins that
+> neither the buffers nor the grace can shift the number.
+
+The two settings therefore do different jobs and must not be conflated: the
+**buffers and grace decide what counts as on time**; the **deviation says by
+how much**, regardless of how they are set.
+
+Each stop exposes the deviation of its most recent counted verdict. Because
+arrivals and departures both feed it, the `kind` attribute says which one the
+current value came from.
+
+## 9. Sampling granularity
 <!-- anchor: sampling -->
 
 Measured against the live feed:

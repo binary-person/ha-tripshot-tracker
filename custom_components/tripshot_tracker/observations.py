@@ -138,6 +138,8 @@ def build_observations(
                     arrival=arrival,
                     departure=departure,
                     geo=geo,
+                    scheduled_arrival=visit.arrival,
+                    scheduled_departure=visit.departure,
                 )
             )
     return observations

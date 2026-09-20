@@ -28,10 +28,13 @@ AWAY = GeoLocality.NOT_AT_STOP
 HERE = GeoLocality.AT_STOP
 
 
-def obs(seconds, geo, stop=STOP, bus=BUS, arr=ARR, dep=DEP) -> Observation:
+def obs(seconds, geo, stop=STOP, bus=BUS, arr=ARR, dep=DEP,
+        sched_arr=SCHED_ARR, sched_dep=SCHED_DEP) -> Observation:
     return Observation(stop_id=stop, vehicle_id=bus,
                        now=SCHED_ARR + timedelta(seconds=seconds),
-                       arrival=arr, departure=dep, geo=geo)
+                       arrival=arr, departure=dep, geo=geo,
+                       scheduled_arrival=sched_arr,
+                       scheduled_departure=sched_dep)
 
 
 class TestCounters:
@@ -412,3 +415,87 @@ class TestDebounce:
         t.observe(obs(-30, HERE), confirmations=2)   # one poll inside only
         t.observe(obs(0, AWAY), confirmations=2)
         assert sum(t.counts_for(STOP).values()) == 0
+
+
+class TestDeviationIsMeasuredFromTheSchedule:
+    """Deviation must be measured from the scheduled instant, not a window edge.
+
+    An earlier version used `arrival.end` and `departure.start`, which sit a
+    measurement grace away from the instants they were built around. A bus
+    arriving exactly on schedule therefore reported -46s at the default grace,
+    and one departing exactly on schedule reported +46s. Anything plotting the
+    deviation would have shown a constant offset.
+    """
+
+    GRACE = 46
+
+    def _windows(self):
+        from tsx.locality import arrival_window, departure_window
+        return (arrival_window(SCHED_ARR, 120, self.GRACE),
+                departure_window(SCHED_DEP, 120, self.GRACE))
+
+    def test_an_exactly_on_time_arrival_has_zero_deviation(self):
+        arr, dep = self._windows()
+        t = RouteTracker()
+        counted = t.observe_detailed(obs(0, HERE, arr=arr, dep=dep))
+        assert counted[0].deviation_sec == 0.0
+
+    def test_an_exactly_on_time_departure_has_zero_deviation(self):
+        arr, dep = self._windows()
+        t = RouteTracker()
+        t.observe(obs(-30, HERE, arr=arr, dep=dep))
+        counted = t.observe_detailed(obs(15, AWAY, arr=arr, dep=dep))
+        assert counted[0].deviation_sec == 0.0
+
+    def test_late_is_positive(self):
+        arr, dep = self._windows()
+        t = RouteTracker()
+        counted = t.observe_detailed(obs(90, HERE, arr=arr, dep=dep))
+        assert counted[0].deviation_sec == 90.0
+
+    def test_early_is_negative(self):
+        arr, dep = self._windows()
+        t = RouteTracker()
+        counted = t.observe_detailed(obs(-90, HERE, arr=arr, dep=dep))
+        assert counted[0].deviation_sec == -90.0
+
+    def test_the_grace_does_not_shift_the_deviation(self):
+        """The bug: a wider grace must not move the reported deviation."""
+        from tsx.locality import arrival_window, departure_window
+        readings = []
+        for grace in (0, 46, 300):
+            arr = arrival_window(SCHED_ARR, 120, grace)
+            dep = departure_window(SCHED_DEP, 120, grace)
+            t = RouteTracker()
+            readings.append(
+                t.observe_detailed(obs(60, HERE, arr=arr, dep=dep))[0].deviation_sec)
+        assert readings == [60.0, 60.0, 60.0], readings
+
+    def test_the_buffers_do_not_shift_it_either(self):
+        from tsx.locality import arrival_window, departure_window
+        readings = []
+        for buf in (0, 120, 600):
+            arr = arrival_window(SCHED_ARR, buf, 46)
+            dep = departure_window(SCHED_DEP, buf, 46)
+            t = RouteTracker()
+            readings.append(
+                t.observe_detailed(obs(-45, HERE, arr=arr, dep=dep))[0].deviation_sec)
+        assert readings == [-45.0, -45.0, -45.0], readings
+
+    def test_scheduled_reports_the_instant_not_the_edge(self):
+        arr, dep = self._windows()
+        t = RouteTracker()
+        counted = t.observe_detailed(obs(0, HERE, arr=arr, dep=dep))
+        assert counted[0].scheduled == SCHED_ARR
+        assert counted[0].scheduled != arr.end
+
+    def test_departure_uses_the_scheduled_departure_pinned_at_arrival(self):
+        """A long dwell must not be measured against a later visit."""
+        arr, dep = self._windows()
+        later = SCHED_DEP + timedelta(hours=1)
+        t = RouteTracker()
+        t.observe(obs(-30, HERE, arr=arr, dep=dep))
+        counted = t.observe_detailed(
+            obs(75, AWAY, arr=arr, dep=dep, sched_dep=later))
+        assert counted[0].scheduled == SCHED_DEP
+        assert counted[0].deviation_sec == 60.0

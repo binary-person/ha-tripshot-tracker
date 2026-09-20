@@ -191,7 +191,8 @@ class TestDynamicStops:
 
         after = len(er.async_entries_for_config_entry(
             er.async_get(hass), entry.entry_id))
-        assert after == before + 7, "expected 6 counters + 1 state for the new stop"
+        assert after == before + 8, \
+            "expected 6 counters + state + deviation for the new stop"
         assert hass.states.get("sensor.red_line_new_stop_depart_early") is not None
 
     async def test_a_vanished_stop_keeps_its_entities(

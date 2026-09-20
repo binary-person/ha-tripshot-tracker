@@ -19,6 +19,7 @@ import logging
 from dataclasses import dataclass
 
 from homeassistant.components.sensor import SensorEntity, SensorStateClass
+from homeassistant.const import UnitOfTime
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers import device_registry as dr
@@ -106,6 +107,8 @@ async def async_setup_entry(
                     StopCounterSensor(coordinator, entry, stop_id, stop.name, state))
             entities.append(
                 StopStateSensor(coordinator, entry, stop_id, stop.name))
+            entities.append(
+                StopDeviationSensor(coordinator, entry, stop_id, stop.name))
             known.add(stop_id)
 
         _LOGGER.info(
@@ -292,6 +295,74 @@ class StopStateSensor(_StopEntity):
                 schedule.visits_for(self._stop_id))
             if upcoming:
                 attrs["next_scheduled_arrival"] = upcoming[0].arrival.isoformat()
+        return attrs
+
+
+class StopDeviationSensor(_StopEntity, RestoreEntity):
+    """How far off schedule the last bus was at this stop, in seconds.
+
+    Positive is late, negative is early, zero is exactly on time. Measured
+    against the scheduled instant itself, not against the edge of an adherence
+    window, so the buffers and the measurement grace do not shift it -- they
+    decide what counts as on time, this says by how much.
+
+    The counters say how often; this says by how much, which is what makes a
+    history graph of it meaningful.
+
+    doc: semantics.time-locality#deviation
+    """
+
+    _attr_name = "Deviation"
+    _attr_native_unit_of_measurement = UnitOfTime.SECONDS
+    _attr_state_class = SensorStateClass.MEASUREMENT
+    _attr_icon = "mdi:timer-outline"
+    _attr_suggested_display_precision = 0
+
+    def __init__(self, coordinator, entry, stop_id, stop_name) -> None:
+        super().__init__(coordinator, entry, stop_id, stop_name)
+        self._attr_unique_id = f"{stable_key(entry)}_{stop_id}_deviation"
+        self._restored: int | None = None
+
+    async def async_added_to_hass(self) -> None:
+        """Carry the last reading across a restart so the graph is continuous.
+
+        Only used until the next verdict at this stop replaces it; the
+        `measured_at` attribute is absent while the value is restored, so a
+        stale reading is distinguishable from a live one.
+        """
+        await super().async_added_to_hass()
+        last = await self.async_get_last_state()
+        if last is None or last.state in (None, "unknown", "unavailable"):
+            return
+        try:
+            self._restored = int(float(last.state))
+        except (TypeError, ValueError):
+            _LOGGER.debug("ignoring unrestorable deviation %r for %s",
+                          last.state, self.entity_id)
+
+    @property
+    def native_value(self) -> int | None:
+        latest = self.coordinator.tracker.latest_for(self._stop_id)
+        if latest is None:
+            return self._restored
+        return round(latest.deviation_sec)
+
+    @property
+    def extra_state_attributes(self) -> dict[str, object]:
+        attrs: dict[str, object] = {"stop_id": self._stop_id}
+        latest = self.coordinator.tracker.latest_for(self._stop_id)
+        if latest is None:
+            attrs["restored"] = self._restored is not None
+            return attrs
+        attrs.update(
+            verdict=latest.verdict.value,
+            kind="arrival" if latest.is_arrival else "departure",
+            punctuality=latest.verdict.value.split("_", 1)[1],
+            deviation_minutes=round(latest.deviation_sec / 60, 1),
+            scheduled=latest.scheduled.isoformat(),
+            measured_at=latest.at.isoformat(),
+            bus=latest.vehicle_id,
+        )
         return attrs
 
 
