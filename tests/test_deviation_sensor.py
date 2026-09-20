@@ -29,6 +29,23 @@ AT_STOP = (43.1590312879686, -77.6012646661841)
 AWAY = (43.1300000000000, -77.6500000000000)
 DEVIATION = "sensor.red_line_eastman_living_center_deviation"
 
+def _seed(coordinator, stop_id, *, seconds, verdict):
+    """Put a known verdict into the tracker, bypassing the clock."""
+    from custom_components.tripshot_tracker.locality import TimeLocality
+    from custom_components.tripshot_tracker.tracker import CountedVerdict
+    scheduled = datetime(2026, 9, 20, 13, 0, tzinfo=timezone.utc)
+    coordinator.tracker.latest[stop_id] = CountedVerdict(
+        stop_id=stop_id, vehicle_id="2603", verdict=TimeLocality(verdict),
+        at=scheduled + timedelta(seconds=seconds), scheduled=scheduled,
+        deviation_sec=float(seconds),
+    )
+
+
+async def _refresh_entity(hass, coordinator):
+    coordinator.async_update_listeners()
+    await hass.async_block_till_done()
+
+
 ENTRY_DATA = {
     "instance_name": "UofR", "instance_label": "UofR Shuttle",
     "instance_id": 526, "base_url": "https://api.tripshot.com",
@@ -102,30 +119,68 @@ class TestSignConvention:
     async def test_a_late_departure_is_positive(
         self, hass: HomeAssistant, bundle
     ):
-        state, coordinator = await self._deviation_after_visit(hass, bundle, None)
-        latest = coordinator.tracker.latest_for(EASTMAN)
-        assert latest is not None
-        if latest.deviation_sec > 0:
-            assert float(state.state) > 0
-            assert state.attributes["punctuality"] == "late"
+        """Deterministic: a known-late verdict must plot positive.
+
+        Driving a real visit gives whatever deviation the clock happens to
+        produce, so asserting the sign conditionally on that would pass even if
+        the value were always zero. This pins a known value instead.
+        """
+        entry = await setup(hass, bundle, live_at(AWAY))
+        c = hass.data[DOMAIN][entry.entry_id]
+        _seed(c, EASTMAN, seconds=+195, verdict="depart_late")
+        await _refresh_entity(hass, c)
+        s = hass.states.get(DEVIATION)
+        assert float(s.state) == 195
+        assert s.attributes["punctuality"] == "late"
+        assert s.attributes["deviation_minutes"] == pytest.approx(3.2, abs=0.1)
+
+    async def test_an_early_departure_is_negative(
+        self, hass: HomeAssistant, bundle
+    ):
+        entry = await setup(hass, bundle, live_at(AWAY))
+        c = hass.data[DOMAIN][entry.entry_id]
+        _seed(c, EASTMAN, seconds=-240, verdict="depart_early")
+        await _refresh_entity(hass, c)
+        s = hass.states.get(DEVIATION)
+        assert float(s.state) == -240
+        assert s.attributes["punctuality"] == "early"
+        assert s.attributes["deviation_minutes"] == pytest.approx(-4.0, abs=0.1)
+
+    async def test_exactly_on_time_is_zero(self, hass: HomeAssistant, bundle):
+        entry = await setup(hass, bundle, live_at(AWAY))
+        c = hass.data[DOMAIN][entry.entry_id]
+        _seed(c, EASTMAN, seconds=0, verdict="arrive_on_time")
+        await _refresh_entity(hass, c)
+        assert float(hass.states.get(DEVIATION).state) == 0
+
+    async def test_an_arrival_is_labelled_as_one(self, hass: HomeAssistant, bundle):
+        entry = await setup(hass, bundle, live_at(AWAY))
+        c = hass.data[DOMAIN][entry.entry_id]
+        _seed(c, EASTMAN, seconds=-60, verdict="arrive_early")
+        await _refresh_entity(hass, c)
+        assert hass.states.get(DEVIATION).attributes["kind"] == "arrival"
 
     async def test_the_state_matches_the_tracker(
         self, hass: HomeAssistant, bundle
     ):
-        state, coordinator = await self._deviation_after_visit(hass, bundle, None)
-        latest = coordinator.tracker.latest_for(EASTMAN)
-        assert float(state.state) == pytest.approx(round(latest.deviation_sec))
+        entry = await setup(hass, bundle, live_at(AT_STOP))
+        c = hass.data[DOMAIN][entry.entry_id]
+        await poll(hass, c, bundle, live_at(AT_STOP))
+        await poll(hass, c, bundle, live_at(AWAY))
+        latest = c.tracker.latest_for(EASTMAN)
+        assert latest is not None, "a real visit should have produced a verdict"
+        assert float(hass.states.get(DEVIATION).state) == round(latest.deviation_sec)
 
-    async def test_sign_matches_the_verdict(self, hass: HomeAssistant, bundle):
-        state, coordinator = await self._deviation_after_visit(hass, bundle, None)
-        latest = coordinator.tracker.latest_for(EASTMAN)
-        value = float(state.state)
-        if latest.verdict.value.endswith("_early"):
-            assert value < 0, "early must plot negative"
-        elif latest.verdict.value.endswith("_late"):
-            assert value > 0, "late must plot positive"
-        else:
-            assert abs(value) <= max(1, coordinator.late_buffer_sec)
+    async def test_each_stop_reports_its_own(self, hass: HomeAssistant, bundle):
+        entry = await setup(hass, bundle, live_at(AWAY))
+        c = hass.data[DOMAIN][entry.entry_id]
+        rush = "ed1e77b3-0708-4eda-9f42-00bd897ab70b"
+        _seed(c, EASTMAN, seconds=+120, verdict="depart_late")
+        _seed(c, rush, seconds=-120, verdict="depart_early")
+        await _refresh_entity(hass, c)
+        assert float(hass.states.get(DEVIATION).state) == 120
+        assert float(hass.states.get(
+            "sensor.red_line_rush_rhees_library_back_side_deviation").state) == -120
 
 
 class TestAttributes:
