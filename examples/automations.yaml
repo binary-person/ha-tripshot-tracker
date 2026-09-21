@@ -330,7 +330,12 @@
       data:
         title: Red Line punctuality today
         message: >-
-          Rush Rhees: {{ states('sensor.rush_rhees_library_back_side_depart_on_time') }}
-          on time, {{ states('sensor.rush_rhees_library_back_side_depart_early') }}
-          early, {{ states('sensor.rush_rhees_library_back_side_depart_late') }}
-          late.
+          Rush Rhees:
+          {{ states('sensor.red_line_rush_rhees_library_back_side_depart_on_time') }}
+          on time,
+          {{ states('sensor.red_line_rush_rhees_library_back_side_depart_early') }}
+          early,
+          {{ states('sensor.red_line_rush_rhees_library_back_side_depart_late') }}
+          late. Last departure
+          {{ states('sensor.red_line_rush_rhees_library_back_side_departure_deviation') }}s
+          off schedule.

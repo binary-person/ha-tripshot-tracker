@@ -139,7 +139,7 @@ revised, so entities that already exist keep the IDs they were given; see
 $ python3 -m venv .venv
 $ .venv/bin/pip install pytest                      # logic tests only
 $ .venv/bin/pip install pytest-homeassistant-custom-component   # + wiring tests
-$ .venv/bin/python -m pytest tests/ -q     # 398 tests
+$ .venv/bin/python -m pytest tests/ -q     # 407 tests
 $ python3 tools/derive.py                  # graph + drift check
 ```
 
