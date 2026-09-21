@@ -1,0 +1,106 @@
+# TripShot Tracker — example dashboard cards.
+#
+# Paste a card into a dashboard: edit the dashboard, ⋮ → Raw configuration
+# editor, or "+ Add card" → Manual and paste a single card's YAML.
+#
+# Entity ids follow <route> <stop>, lowercased. Replace them with your own —
+# the ones below are University of Rochester / Red Line.
+
+views:
+  - title: Transit
+    cards:
+
+      # ------------------------------------------------------------------
+      # How far off schedule, over time. Positive is late, negative early,
+      # and zero is exactly on time, so the x-axis is the timetable itself.
+      #
+      # Arrivals and departures are separate series deliberately: a bus can
+      # arrive late and leave early at the same stop, and one line carrying
+      # both would plot two different facts as one.
+      # ------------------------------------------------------------------
+      - type: history-graph
+        title: Red Line — seconds off schedule
+        hours_to_show: 24
+        entities:
+          - entity: sensor.red_line_eastman_living_center_arrival_deviation
+            name: Eastman arrive
+          - entity: sensor.red_line_eastman_living_center_departure_deviation
+            name: Eastman depart
+          - entity: sensor.red_line_rush_rhees_library_back_side_arrival_deviation
+            name: Rush Rhees arrive
+          - entity: sensor.red_line_rush_rhees_library_back_side_departure_deviation
+            name: Rush Rhees depart
+
+      # ------------------------------------------------------------------
+      # One stop at a time reads better when a route has many stops.
+      # ------------------------------------------------------------------
+      - type: history-graph
+        title: Eastman Living Center
+        hours_to_show: 48
+        entities:
+          - entity: sensor.red_line_eastman_living_center_arrival_deviation
+            name: Arriving
+          - entity: sensor.red_line_eastman_living_center_departure_deviation
+            name: Departing
+
+      # ------------------------------------------------------------------
+      # The counters: how often, rather than by how much. TOTAL_INCREASING,
+      # so a statistics card shows the change over a period rather than the
+      # running total.
+      # ------------------------------------------------------------------
+      - type: statistic
+        title: Early departures today
+        entity: sensor.red_line_eastman_living_center_depart_early
+        stat_type: change
+        period:
+          calendar:
+            period: day
+
+      - type: entities
+        title: Eastman Living Center — today
+        entities:
+          - entity: sensor.red_line_eastman_living_center_arrive_early
+            name: Arrived early
+          - entity: sensor.red_line_eastman_living_center_arrive_on_time
+            name: Arrived on time
+          - entity: sensor.red_line_eastman_living_center_arrive_late
+            name: Arrived late
+          - type: divider
+          - entity: sensor.red_line_eastman_living_center_depart_early
+            name: Departed early
+          - entity: sensor.red_line_eastman_living_center_depart_on_time
+            name: Departed on time
+          - entity: sensor.red_line_eastman_living_center_depart_late
+            name: Departed late
+
+      # ------------------------------------------------------------------
+      # Running buses, and whether the integration is healthy.
+      # ------------------------------------------------------------------
+      - type: entities
+        title: Red Line
+        entities:
+          - entity: sensor.red_line_buses
+            name: Buses running
+          - entity: sensor.red_line_schedule_health
+            name: Schedule
+          - entity: sensor.red_line_eastman_living_center_current_state
+            name: Eastman
+          - entity: sensor.red_line_rush_rhees_library_back_side_current_state
+            name: Rush Rhees
+
+      # ------------------------------------------------------------------
+      # A single number: how late the last bus was, in minutes rather than
+      # seconds. Needs no custom cards.
+      # ------------------------------------------------------------------
+      - type: markdown
+        title: Last departure
+        content: >-
+          {% set s = states('sensor.red_line_eastman_living_center_departure_deviation') %}
+          {% if s in ['unknown', 'unavailable'] %}
+            No departure recorded yet.
+          {% else %}
+            {% set secs = s | float %}
+            Left Eastman
+            **{{ (secs | abs / 60) | round(1) }} minutes
+            {{ 'late' if secs > 0 else 'early' if secs < 0 else 'exactly on time' }}**.
+          {% endif %}

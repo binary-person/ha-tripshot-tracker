@@ -171,7 +171,8 @@ triggers:
       verdict: depart_early
 ```
 
-Ready-made examples in [`examples/automations.yaml`](examples/automations.yaml),
+Ready-made automations in [`examples/automations.yaml`](examples/automations.yaml)
+and dashboard cards in [`examples/dashboard.yaml`](examples/dashboard.yaml),
 with installation instructions in [`examples/README.md`](examples/README.md) —
 covering the format difference between `automations.yaml` (a plain list) and
 `configuration.yaml` (an `automation:` key), filtering by route and stop, and

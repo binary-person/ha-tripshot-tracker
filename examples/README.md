@@ -1,3 +1,12 @@
+# Examples
+
+- [`automations.yaml`](automations.yaml) — alerting on early departures and
+  other verdicts, with filtering by route and stop.
+- [`dashboard.yaml`](dashboard.yaml) — history graphs of the deviation
+  metrics, counter tiles, and a plain-English "how late was the last bus"
+  card. Paste a card via **Edit dashboard → + Add card → Manual**, or the
+  whole view via **⋮ → Raw configuration editor**.
+
 # Installing the example automations
 
 Two ways. The first needs no file editing and is the one to use if you are not
