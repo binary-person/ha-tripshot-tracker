@@ -27,14 +27,16 @@ ROUTE_ID = "22443444-e127-4e40-8927-a3192e750369"
 EASTMAN = "37fb377f-6170-4948-9560-9fd3569c30b4"
 AT_STOP = (43.1590312879686, -77.6012646661841)
 AWAY = (43.1300000000000, -77.6500000000000)
-DEVIATION = "sensor.red_line_eastman_living_center_deviation"
+ARRIVAL = "sensor.red_line_eastman_living_center_arrival_deviation"
+DEPARTURE = "sensor.red_line_eastman_living_center_departure_deviation"
 
 def _seed(coordinator, stop_id, *, seconds, verdict):
     """Put a known verdict into the tracker, bypassing the clock."""
     from custom_components.tripshot_tracker.locality import TimeLocality
     from custom_components.tripshot_tracker.tracker import CountedVerdict
+    kind = "arrival" if verdict.startswith("arrive") else "departure"
     scheduled = datetime(2026, 9, 20, 13, 0, tzinfo=timezone.utc)
-    coordinator.tracker.latest[stop_id] = CountedVerdict(
+    coordinator.tracker.latest[(stop_id, kind)] = CountedVerdict(
         stop_id=stop_id, vehicle_id="2603", verdict=TimeLocality(verdict),
         at=scheduled + timedelta(seconds=seconds), scheduled=scheduled,
         deviation_sec=float(seconds),
@@ -88,21 +90,22 @@ async def poll(hass, coordinator, bundle, live):
 class TestExists:
     async def test_one_per_stop(self, hass: HomeAssistant, bundle):
         await setup(hass, bundle, live_at(AWAY))
-        assert hass.states.get(DEVIATION) is not None
-        assert hass.states.get(
-            "sensor.red_line_rush_rhees_library_back_side_deviation") is not None
+        for eid in (ARRIVAL, DEPARTURE,
+                    "sensor.red_line_rush_rhees_library_back_side_arrival_deviation",
+                    "sensor.red_line_rush_rhees_library_back_side_departure_deviation"):
+            assert hass.states.get(eid) is not None, eid
 
     async def test_it_is_a_measurement_in_seconds(
         self, hass: HomeAssistant, bundle
     ):
         await setup(hass, bundle, live_at(AWAY))
-        s = hass.states.get(DEVIATION)
+        s = hass.states.get(DEPARTURE)
         assert s.attributes["unit_of_measurement"] == "s"
         assert s.attributes["state_class"] == "measurement"
 
     async def test_unknown_before_any_visit(self, hass: HomeAssistant, bundle):
         await setup(hass, bundle, live_at(AWAY))
-        assert hass.states.get(DEVIATION).state == "unknown"
+        assert hass.states.get(DEPARTURE).state == "unknown"
 
 
 class TestSignConvention:
@@ -114,7 +117,7 @@ class TestSignConvention:
         coordinator = hass.data[DOMAIN][entry.entry_id]
         await poll(hass, coordinator, bundle, live_at(AT_STOP))
         await poll(hass, coordinator, bundle, live_at(AWAY))
-        return hass.states.get(DEVIATION), coordinator
+        return hass.states.get(DEPARTURE), coordinator
 
     async def test_a_late_departure_is_positive(
         self, hass: HomeAssistant, bundle
@@ -129,7 +132,7 @@ class TestSignConvention:
         c = hass.data[DOMAIN][entry.entry_id]
         _seed(c, EASTMAN, seconds=+195, verdict="depart_late")
         await _refresh_entity(hass, c)
-        s = hass.states.get(DEVIATION)
+        s = hass.states.get(DEPARTURE)
         assert float(s.state) == 195
         assert s.attributes["punctuality"] == "late"
         assert s.attributes["deviation_minutes"] == pytest.approx(3.2, abs=0.1)
@@ -141,7 +144,7 @@ class TestSignConvention:
         c = hass.data[DOMAIN][entry.entry_id]
         _seed(c, EASTMAN, seconds=-240, verdict="depart_early")
         await _refresh_entity(hass, c)
-        s = hass.states.get(DEVIATION)
+        s = hass.states.get(DEPARTURE)
         assert float(s.state) == -240
         assert s.attributes["punctuality"] == "early"
         assert s.attributes["deviation_minutes"] == pytest.approx(-4.0, abs=0.1)
@@ -151,14 +154,15 @@ class TestSignConvention:
         c = hass.data[DOMAIN][entry.entry_id]
         _seed(c, EASTMAN, seconds=0, verdict="arrive_on_time")
         await _refresh_entity(hass, c)
-        assert float(hass.states.get(DEVIATION).state) == 0
+        assert float(hass.states.get(ARRIVAL).state) == 0
 
     async def test_an_arrival_is_labelled_as_one(self, hass: HomeAssistant, bundle):
         entry = await setup(hass, bundle, live_at(AWAY))
         c = hass.data[DOMAIN][entry.entry_id]
         _seed(c, EASTMAN, seconds=-60, verdict="arrive_early")
         await _refresh_entity(hass, c)
-        assert hass.states.get(DEVIATION).attributes["kind"] == "arrival"
+        assert hass.states.get(ARRIVAL).attributes["kind"] == "arrival"
+        assert float(hass.states.get(ARRIVAL).state) == -60
 
     async def test_the_state_matches_the_tracker(
         self, hass: HomeAssistant, bundle
@@ -167,9 +171,9 @@ class TestSignConvention:
         c = hass.data[DOMAIN][entry.entry_id]
         await poll(hass, c, bundle, live_at(AT_STOP))
         await poll(hass, c, bundle, live_at(AWAY))
-        latest = c.tracker.latest_for(EASTMAN)
+        latest = c.tracker.latest_for(EASTMAN, "departure")
         assert latest is not None, "a real visit should have produced a verdict"
-        assert float(hass.states.get(DEVIATION).state) == round(latest.deviation_sec)
+        assert float(hass.states.get(DEPARTURE).state) == round(latest.deviation_sec)
 
     async def test_each_stop_reports_its_own(self, hass: HomeAssistant, bundle):
         entry = await setup(hass, bundle, live_at(AWAY))
@@ -178,9 +182,9 @@ class TestSignConvention:
         _seed(c, EASTMAN, seconds=+120, verdict="depart_late")
         _seed(c, rush, seconds=-120, verdict="depart_early")
         await _refresh_entity(hass, c)
-        assert float(hass.states.get(DEVIATION).state) == 120
+        assert float(hass.states.get(DEPARTURE).state) == 120
         assert float(hass.states.get(
-            "sensor.red_line_rush_rhees_library_back_side_deviation").state) == -120
+            "sensor.red_line_rush_rhees_library_back_side_departure_deviation").state) == -120
 
 
 class TestAttributes:
@@ -191,7 +195,7 @@ class TestAttributes:
         c = hass.data[DOMAIN][entry.entry_id]
         await poll(hass, c, bundle, live_at(AT_STOP))
         await poll(hass, c, bundle, live_at(AWAY))
-        a = hass.states.get(DEVIATION).attributes
+        a = hass.states.get(DEPARTURE).attributes
         assert a["kind"] == "departure"
         assert a["verdict"].startswith("depart_")
         assert "scheduled" in a and "measured_at" in a
@@ -204,7 +208,7 @@ class TestAttributes:
         c = hass.data[DOMAIN][entry.entry_id]
         await poll(hass, c, bundle, live_at(AT_STOP))
         await poll(hass, c, bundle, live_at(AWAY))
-        s = hass.states.get(DEVIATION)
+        s = hass.states.get(DEPARTURE)
         assert s.attributes["deviation_minutes"] == pytest.approx(
             float(s.state) / 60, abs=0.06)
 
@@ -214,46 +218,122 @@ class TestRestore:
         self, hass: HomeAssistant, bundle
     ):
         """So a history graph does not gap across a restart."""
-        mock_restore_cache(hass, (State(DEVIATION, "-93"),))
+        mock_restore_cache(hass, (State(DEPARTURE, "-93"),))
         entry = MockConfigEntry(domain=DOMAIN, data=ENTRY_DATA,
                                 options={"confirm_polls": 1},
                                 unique_id=f"UofR:{ROUTE_ID}")
         entry.add_to_hass(hass)
         from homeassistant.helpers import entity_registry as er
         er.async_get(hass).async_get_or_create(
-            "sensor", DOMAIN, f"UofR:{ROUTE_ID}_{EASTMAN}_deviation",
+            "sensor", DOMAIN, f"UofR:{ROUTE_ID}_{EASTMAN}_departure_deviation",
             config_entry=entry,
-            suggested_object_id="red_line_eastman_living_center_deviation")
+            suggested_object_id=
+            "red_line_eastman_living_center_departure_deviation")
         await setup(hass, bundle, live_at(AWAY), entry)
-        assert hass.states.get(DEVIATION).state == "-93"
+        assert hass.states.get(DEPARTURE).state == "-93"
 
     async def test_a_restored_reading_is_marked_as_such(
         self, hass: HomeAssistant, bundle
     ):
         """`measured_at` is absent while restored, so staleness is visible."""
-        mock_restore_cache(hass, (State(DEVIATION, "-93"),))
+        mock_restore_cache(hass, (State(DEPARTURE, "-93"),))
         entry = MockConfigEntry(domain=DOMAIN, data=ENTRY_DATA,
                                 options={"confirm_polls": 1},
                                 unique_id=f"UofR:{ROUTE_ID}")
         entry.add_to_hass(hass)
         from homeassistant.helpers import entity_registry as er
         er.async_get(hass).async_get_or_create(
-            "sensor", DOMAIN, f"UofR:{ROUTE_ID}_{EASTMAN}_deviation",
+            "sensor", DOMAIN, f"UofR:{ROUTE_ID}_{EASTMAN}_departure_deviation",
             config_entry=entry,
-            suggested_object_id="red_line_eastman_living_center_deviation")
+            suggested_object_id=
+            "red_line_eastman_living_center_departure_deviation")
         await setup(hass, bundle, live_at(AWAY), entry)
-        a = hass.states.get(DEVIATION).attributes
+        a = hass.states.get(DEPARTURE).attributes
         assert a["restored"] is True
         assert "measured_at" not in a
 
     async def test_a_live_reading_replaces_the_restored_one(
         self, hass: HomeAssistant, bundle
     ):
-        mock_restore_cache(hass, (State(DEVIATION, "-93"),))
+        mock_restore_cache(hass, (State(DEPARTURE, "-93"),))
         entry = await setup(hass, bundle, live_at(AT_STOP))
         c = hass.data[DOMAIN][entry.entry_id]
         await poll(hass, c, bundle, live_at(AT_STOP))
         await poll(hass, c, bundle, live_at(AWAY))
-        s = hass.states.get(DEVIATION)
+        s = hass.states.get(DEPARTURE)
         assert s.state != "-93"
         assert "measured_at" in s.attributes
+
+
+class TestArrivalAndDepartureAreIndependent:
+    """The reason for the split.
+
+    A bus can arrive late and leave early at the same stop. One series
+    carrying both would plot those two facts as a single wandering line; two
+    series keep each one readable.
+    """
+
+    async def test_late_arrival_and_early_departure_coexist(
+        self, hass: HomeAssistant, bundle
+    ):
+        entry = await setup(hass, bundle, live_at(AWAY))
+        c = hass.data[DOMAIN][entry.entry_id]
+        _seed(c, EASTMAN, seconds=+140, verdict="arrive_late")
+        _seed(c, EASTMAN, seconds=-95, verdict="depart_early")
+        await _refresh_entity(hass, c)
+
+        assert float(hass.states.get(ARRIVAL).state) == 140
+        assert float(hass.states.get(DEPARTURE).state) == -95
+        assert hass.states.get(ARRIVAL).attributes["punctuality"] == "late"
+        assert hass.states.get(DEPARTURE).attributes["punctuality"] == "early"
+
+    async def test_a_departure_does_not_overwrite_the_arrival(
+        self, hass: HomeAssistant, bundle
+    ):
+        """The single-sensor version lost the arrival the moment it left."""
+        entry = await setup(hass, bundle, live_at(AWAY))
+        c = hass.data[DOMAIN][entry.entry_id]
+        _seed(c, EASTMAN, seconds=+140, verdict="arrive_late")
+        await _refresh_entity(hass, c)
+        assert float(hass.states.get(ARRIVAL).state) == 140
+
+        _seed(c, EASTMAN, seconds=-95, verdict="depart_early")
+        await _refresh_entity(hass, c)
+        assert float(hass.states.get(ARRIVAL).state) == 140, \
+            "the arrival reading was overwritten by a departure"
+
+    async def test_each_reports_only_its_own_kind(
+        self, hass: HomeAssistant, bundle
+    ):
+        entry = await setup(hass, bundle, live_at(AWAY))
+        c = hass.data[DOMAIN][entry.entry_id]
+        _seed(c, EASTMAN, seconds=+30, verdict="arrive_late")
+        await _refresh_entity(hass, c)
+        assert hass.states.get(ARRIVAL).attributes["kind"] == "arrival"
+        assert hass.states.get(DEPARTURE).state == "unknown", \
+            "a departure sensor must not pick up an arrival verdict"
+
+    async def test_both_stops_keep_four_independent_series(
+        self, hass: HomeAssistant, bundle
+    ):
+        entry = await setup(hass, bundle, live_at(AWAY))
+        c = hass.data[DOMAIN][entry.entry_id]
+        rush = "ed1e77b3-0708-4eda-9f42-00bd897ab70b"
+        _seed(c, EASTMAN, seconds=+10, verdict="arrive_late")
+        _seed(c, EASTMAN, seconds=+20, verdict="depart_late")
+        _seed(c, rush, seconds=-30, verdict="arrive_early")
+        _seed(c, rush, seconds=-40, verdict="depart_early")
+        await _refresh_entity(hass, c)
+
+        base = "sensor.red_line_rush_rhees_library_back_side"
+        assert float(hass.states.get(ARRIVAL).state) == 10
+        assert float(hass.states.get(DEPARTURE).state) == 20
+        assert float(hass.states.get(f"{base}_arrival_deviation").state) == -30
+        assert float(hass.states.get(f"{base}_departure_deviation").state) == -40
+
+    async def test_the_names_distinguish_them(self, hass: HomeAssistant, bundle):
+        await setup(hass, bundle, live_at(AWAY))
+        assert hass.states.get(ARRIVAL).attributes["friendly_name"].endswith(
+            "Arrival deviation")
+        assert hass.states.get(DEPARTURE).attributes["friendly_name"].endswith(
+            "Departure deviation")

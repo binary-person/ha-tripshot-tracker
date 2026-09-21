@@ -110,15 +110,20 @@ sent.
 |---|---|---|
 | `Arrive early` / `Arrive on time` / `Arrive late` | stop | `TOTAL_INCREASING` counters |
 | `Depart early` / `Depart on time` / `Depart late` | stop | `TOTAL_INCREASING` counters |
-| `Deviation` | stop | seconds off schedule — **positive late, negative early** |
+| `Arrival deviation` | stop | seconds off schedule arriving — **positive late, negative early** |
+| `Departure deviation` | stop | seconds off schedule departing — same sign convention |
 | `Current state` | stop | diagnostic; the sticky state |
 | `Buses` | route | buses currently running the line |
 | `Schedule health` | route | diagnostic; buffer/schedule validation |
 
-`Deviation` is the metric to graph: the counters say how often a bus was off
-schedule, it says by how much. It is measured from the scheduled instant, so
-the buffers and the measurement grace decide what counts as on time without
-shifting the number.
+The deviation sensors are the ones to graph: the counters say how often a bus
+was off schedule, these say by how much. They are measured from the scheduled
+instant, so the buffers and the measurement grace decide what counts as on
+time without shifting the number.
+
+Arrivals and departures are separate entities because they measure different
+things — a bus can arrive late and leave early at the same stop, and one
+series carrying both would plot two meanings as a single line.
 
 Each stop is its own device, named `<route> <stop>` and linked to the route
 device — so a stop served by two lines yields two devices, e.g.
@@ -134,7 +139,7 @@ revised, so entities that already exist keep the IDs they were given; see
 $ python3 -m venv .venv
 $ .venv/bin/pip install pytest                      # logic tests only
 $ .venv/bin/pip install pytest-homeassistant-custom-component   # + wiring tests
-$ .venv/bin/python -m pytest tests/ -q     # 393 tests
+$ .venv/bin/python -m pytest tests/ -q     # 398 tests
 $ python3 tools/derive.py                  # graph + drift check
 ```
 

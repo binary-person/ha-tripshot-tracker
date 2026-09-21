@@ -107,8 +107,9 @@ async def async_setup_entry(
                     StopCounterSensor(coordinator, entry, stop_id, stop.name, state))
             entities.append(
                 StopStateSensor(coordinator, entry, stop_id, stop.name))
-            entities.append(
-                StopDeviationSensor(coordinator, entry, stop_id, stop.name))
+            for kind in ("arrival", "departure"):
+                entities.append(StopDeviationSensor(
+                    coordinator, entry, stop_id, stop.name, kind))
             known.add(stop_id)
 
         _LOGGER.info(
@@ -299,36 +300,41 @@ class StopStateSensor(_StopEntity):
 
 
 class StopDeviationSensor(_StopEntity, RestoreEntity):
-    """How far off schedule the last bus was at this stop, in seconds.
+    """How far off schedule the last arrival, or departure, was at this stop.
 
     Positive is late, negative is early, zero is exactly on time. Measured
     against the scheduled instant itself, not against the edge of an adherence
     window, so the buffers and the measurement grace do not shift it -- they
     decide what counts as on time, this says by how much.
 
-    The counters say how often; this says by how much, which is what makes a
-    history graph of it meaningful.
+    Arrivals and departures get separate entities because they measure
+    different things: a bus can arrive two minutes late and leave one minute
+    early at the same stop, and a single series carrying both plots two
+    meanings as one.
 
     doc: semantics.time-locality#deviation
     """
 
-    _attr_name = "Deviation"
     _attr_native_unit_of_measurement = UnitOfTime.SECONDS
     _attr_state_class = SensorStateClass.MEASUREMENT
-    _attr_icon = "mdi:timer-outline"
     _attr_suggested_display_precision = 0
 
-    def __init__(self, coordinator, entry, stop_id, stop_name) -> None:
+    def __init__(self, coordinator, entry, stop_id, stop_name,
+                 kind: str) -> None:
         super().__init__(coordinator, entry, stop_id, stop_name)
-        self._attr_unique_id = f"{stable_key(entry)}_{stop_id}_deviation"
+        self._kind = kind
+        self._attr_name = f"{kind.capitalize()} deviation"
+        self._attr_unique_id = f"{stable_key(entry)}_{stop_id}_{kind}_deviation"
+        self._attr_icon = ("mdi:clock-in" if kind == "arrival"
+                           else "mdi:clock-out")
         self._restored: int | None = None
 
     async def async_added_to_hass(self) -> None:
         """Carry the last reading across a restart so the graph is continuous.
 
-        Only used until the next verdict at this stop replaces it; the
+        Used only until the next verdict of this kind replaces it. The
         `measured_at` attribute is absent while the value is restored, so a
-        stale reading is distinguishable from a live one.
+        stale reading stays distinguishable from a live one.
         """
         await super().async_added_to_hass()
         last = await self.async_get_last_state()
@@ -342,21 +348,21 @@ class StopDeviationSensor(_StopEntity, RestoreEntity):
 
     @property
     def native_value(self) -> int | None:
-        latest = self.coordinator.tracker.latest_for(self._stop_id)
+        latest = self.coordinator.tracker.latest_for(self._stop_id, self._kind)
         if latest is None:
             return self._restored
         return round(latest.deviation_sec)
 
     @property
     def extra_state_attributes(self) -> dict[str, object]:
-        attrs: dict[str, object] = {"stop_id": self._stop_id}
-        latest = self.coordinator.tracker.latest_for(self._stop_id)
+        attrs: dict[str, object] = {"stop_id": self._stop_id,
+                                    "kind": self._kind}
+        latest = self.coordinator.tracker.latest_for(self._stop_id, self._kind)
         if latest is None:
             attrs["restored"] = self._restored is not None
             return attrs
         attrs.update(
             verdict=latest.verdict.value,
-            kind="arrival" if latest.is_arrival else "departure",
             punctuality=latest.verdict.value.split("_", 1)[1],
             deviation_minutes=round(latest.deviation_sec / 60, 1),
             scheduled=latest.scheduled.isoformat(),

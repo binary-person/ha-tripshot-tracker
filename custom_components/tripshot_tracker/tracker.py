@@ -123,9 +123,11 @@ class RouteTracker:
     """Accumulates per-stop counters across every bus on a route."""
 
     counts: dict[str, dict[TimeLocality, int]] = field(default_factory=dict)
-    #: The most recent counted verdict per stop, for the deviation metric.
-    #: Counters say how often; this says by how much, and when.
-    latest: dict[str, CountedVerdict] = field(default_factory=dict)
+    #: The most recent counted verdict per (stop, kind), for the deviation
+    #: metric. Arrivals and departures are kept apart because they measure
+    #: different things -- a bus can arrive late and leave early at the same
+    #: stop -- so a single series mixing them plots two meanings as one.
+    latest: dict[tuple[str, str], CountedVerdict] = field(default_factory=dict)
     _latches: dict[tuple[str, str], _Latch] = field(default_factory=dict)
 
     # -- counter access ---------------------------------------------------
@@ -137,9 +139,12 @@ class RouteTracker:
     def count(self, stop_id: str, state: TimeLocality) -> int:
         return self.counts.get(stop_id, {}).get(state, 0)
 
-    def latest_for(self, stop_id: str) -> CountedVerdict | None:
-        """The most recent counted verdict at a stop, if there has been one."""
-        return self.latest.get(stop_id)
+    def latest_for(self, stop_id: str, kind: str) -> CountedVerdict | None:
+        """The most recent arrival or departure verdict at a stop.
+
+        `kind` is "arrival" or "departure".
+        """
+        return self.latest.get((stop_id, kind))
 
     def seed(self, stop_id: str, state: TimeLocality, value: int) -> None:
         """Restore a counter from Home Assistant's saved state.
@@ -311,7 +316,7 @@ class RouteTracker:
                 verdict=verdict, at=at, scheduled=obs.scheduled_arrival,
                 deviation_sec=(at - obs.scheduled_arrival).total_seconds(),
             )
-            self.latest[obs.stop_id] = counted
+            self.latest[(obs.stop_id, "arrival")] = counted
             emitted.append(counted)
             _LOGGER.info(
                 "bus %s arrived at %s: %s (at=%s, window=%s..%s)",
@@ -328,7 +333,7 @@ class RouteTracker:
                 verdict=verdict, at=at, scheduled=scheduled,
                 deviation_sec=(at - scheduled).total_seconds(),
             )
-            self.latest[obs.stop_id] = counted
+            self.latest[(obs.stop_id, "departure")] = counted
             emitted.append(counted)
             _LOGGER.info(
                 "bus %s departed %s: %s (at=%s, window=%s..%s)",

@@ -325,9 +325,14 @@ The two settings therefore do different jobs and must not be conflated: the
 **buffers and grace decide what counts as on time**; the **deviation says by
 how much**, regardless of how they are set.
 
-Each stop exposes the deviation of its most recent counted verdict. Because
-arrivals and departures both feed it, the `kind` attribute says which one the
-current value came from.
+Each stop exposes **two** deviation entities, `Arrival deviation` and
+`Departure deviation`, because the two measure different things. A bus can
+arrive two minutes late and leave one minute early at the same stop; a single
+series carrying both plots those as one wandering line, and each new departure
+erases the arrival that preceded it.
+
+Kept apart, each reads on its own terms: arrival deviation is what a waiting
+rider experiences, departure deviation is what leaves them behind.
 
 ## 9. Sampling granularity
 <!-- anchor: sampling -->
